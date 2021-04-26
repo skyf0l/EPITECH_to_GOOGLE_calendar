@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
 
+from google_calendar import service
+
 from sys import argv
+from datetime import datetime, timedelta
 import os
 import requests
-from datetime import datetime, timedelta
+import json
+
+# config
 
 EPITECH_AUTOLOGIN = os.getenv("EPITECH_AUTOLOGIN")
 if EPITECH_AUTOLOGIN is None:
     print("EPITECH_AUTOLOGIN not in env")
     exit(1)
+
+config = json.load(open("config.json"))
+CALENDAR_ID_EVENTS = config['calendarID_events']
+CALENDAR_ID_TIMELINE = config['calendarID_timeline']
 
 
 # format: start/end => datetime
@@ -69,6 +78,56 @@ def get_my_epitech_registered_projects(start=None, end=None):
 
     return projets
 
+
+# return right (start, end) of event
+
+def get_epitech_event_date(event):
+    if 'rdv_group_registered' in event and event['rdv_group_registered'] is not None:
+        return event['rdv_group_registered'].split('|')
+    elif 'rdv_indiv_registered' in event and event['rdv_indiv_registered'] is not None:
+        return event['rdv_indiv_registered'].split('|')
+    return event['start'], event['end']
+
+
+# add event to google calendar
+
+def add_google_calendar_event(calendarID, event):
+    event_start, event_end = get_epitech_event_date(event)
+    event = {
+        "summary": event['codemodule'] + ' - ' + event['acti_title'],
+        # "location": "location",
+        # "description": "description",
+        "start": {
+            "dateTime": event_start.replace(' ', 'T'),
+            "timeZone": "Europe/Paris"
+        },
+        "end": {
+            "dateTime": event_end.replace(' ', 'T'),
+            "timeZone": "Europe/Paris"
+        },
+    }
+    service.events().insert(calendarId=calendarID, body=event).execute()
+
+
+# add project to google calendar
+
+def add_google_calendar_project(calendarID, project):
+    event = {
+        "summary": project['codemodule'] + ' - ' + project['acti_title'],
+        # "location": "location",
+        # "description": "description",
+        "start": {
+            "dateTime": project['begin_acti'].replace(' ', 'T'),
+            "timeZone": "Europe/Paris"
+        },
+        "end": {
+            "dateTime": project['end_acti'].replace(' ', 'T'),
+            "timeZone": "Europe/Paris"
+        },
+    }
+    service.events().insert(calendarId=calendarID, body=event).execute()
+
+
 # update callendar from monday of current week
 if len(argv) == 2:
     current_date = datetime.strptime(argv[1], '%Y-%m-%d')
@@ -80,15 +139,9 @@ my_events = get_my_epitech_events(start=monday_of_current_week)
 
 print(f'{len(my_events)} events registered:')
 for event in my_events:
-    if 'rdv_group_registered' in event and event['rdv_group_registered'] is not None:
-        event_start, event_end = event['rdv_group_registered'].split('|')
-    elif 'rdv_indiv_registered' in event and event['rdv_indiv_registered'] is not None:
-        event_start, event_end = event['rdv_indiv_registered'].split('|')
-    else:
-        event_start = event['start']
-        event_end = event['end']
-    
+    event_start, event_end = get_epitech_event_date(event)
     print(event_start + ' - ' + event_end + ' -> ' + event['acti_title'])
+    add_google_calendar_event(CALENDAR_ID_EVENTS, event)
 
 print()
 
@@ -96,3 +149,4 @@ my_projects = get_my_epitech_registered_projects(start=monday_of_current_week)
 print(f'{len(my_projects)} projets registered:')
 for project in my_projects:
     print(project['begin_acti'] + ' - ' + project['end_acti'] + ' -> ' + project['acti_title'])
+    add_google_calendar_project(CALENDAR_ID_TIMELINE, project)
