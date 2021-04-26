@@ -8,3 +8,11 @@ Synchronize your Epitech calendar with Google.
   - [ ] Remove canceled events
   - [ ] Update events which have been moved in Epitech calendar
   - [ ] Display only the selected slot for multi-stots events
+
+# Config
+
+Python3 - Requirements
+
+```
+sudo pip3 install -r requirements.txt
+```
