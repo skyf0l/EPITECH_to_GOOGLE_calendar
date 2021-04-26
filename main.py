@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from sys import argv
 import os
 import requests
 from datetime import datetime, timedelta
@@ -69,7 +70,10 @@ def get_my_epitech_registered_projects(start=None, end=None):
     return projets
 
 # update callendar from monday of current week
-current_date = datetime.today()
+if len(argv) == 2:
+    current_date = datetime.strptime(argv[1], '%Y-%m-%d')
+else:
+    current_date = datetime.today()
 monday_of_current_week = current_date - timedelta(days=current_date.weekday())
 
 my_events = get_my_epitech_events(start=monday_of_current_week)
@@ -84,11 +88,11 @@ for event in my_events:
         event_start = event['start']
         event_end = event['end']
     
-    print(event_start + ' - ' + event_end + '\t-> ' + event['acti_title'])
+    print(event_start + ' - ' + event_end + ' -> ' + event['acti_title'])
 
 print()
 
 my_projects = get_my_epitech_registered_projects(start=monday_of_current_week)
 print(f'{len(my_projects)} projets registered:')
 for project in my_projects:
-    print(project['begin_acti'] + ' ' + project['end_acti'] + '\t-> ' + project['acti_title'])
+    print(project['begin_acti'] + ' - ' + project['end_acti'] + ' -> ' + project['acti_title'])
