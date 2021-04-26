@@ -9,26 +9,26 @@ if EPITECH_AUTOLOGIN is None:
     print("EPITECH_AUTOLOGIN not in env")
     exit(1)
 
-# format: date_from/date_to => 'YYYY-MM-DD'
-# get_epitech_events() => current week
-# get_epitech_events(from) => all after from included
-# get_epitech_events(to) => all in one month before to and to
 
-def get_epitech_events(date_from=None, date_to=None):
+# format: start/end => datetime
+# get_epitech_events() => all after one month before today
+# get_epitech_events(start) => all after start
+# get_epitech_events(end) => all in one month before end and end
+
+def get_epitech_events(start=None, end=None):
     url = f'https://intra.epitech.eu/{EPITECH_AUTOLOGIN}/planning/load?format=json'
-    if date_from is not None:
-        url += '&start=' + date_from.strftime('%Y-%m-%d')
-    if date_to is not None:
-        url += '&end=' + date_to.strftime('%Y-%m-%d')
-    events = requests.get(url).json()
-    return events
+    if start is not None:
+        url += '&start=' + start.strftime('%Y-%m-%d')
+    if end is not None:
+        url += '&end=' + end.strftime('%Y-%m-%d')
+    return requests.get(url).json()
+
 
 # same as get_epitech_events but keep only registered events
 # /!\ english delivery not marked as registered
 
-def get_my_epitech_events(date_from=None, date_to=None):
-    events = get_epitech_events(date_from=date_from, date_to=date_to)
-    print(len(events))
+def get_my_epitech_events(start=None, end=None):
+    events = get_epitech_events(start=start, end=end)
     events_registered = []
     for event in events:
         if 'event_registered' in event and event['event_registered'] is not False:
@@ -36,17 +36,59 @@ def get_my_epitech_events(date_from=None, date_to=None):
     return events_registered
 
 
+# format: start/end => datetime
+# get_my_epitech_activities() => current week
+# get_my_epitech_activities(start) => all after start included
+# get_my_epitech_activities(end) => all in one month before end and end
+
+def get_my_epitech_activities(start=None, end=None):
+    if start is None and end is None:
+        current_date = datetime.today()
+        start = current_date - timedelta(days=current_date.weekday())
+        end = start + timedelta(weeks=1)
+    elif start is None:
+        start = end - timedelta(days=31)
+    elif end is None:
+        end = start + timedelta(days=365)
+
+    url = f'https://intra.epitech.eu/{EPITECH_AUTOLOGIN}/module/board/?format=json&start={start.strftime("%Y-%m-%d")}&end={end.strftime("%Y-%m-%d")}'
+    return requests.get(url).json()
+
+
+# same as get_my_epitech_activities but keep only registered projects
+
+def get_my_epitech_registered_projects(start=None, end=None):
+    activities = get_my_epitech_activities(start, end)
+    projets = []
+
+    for activity in activities:
+        if 'registered' in activity and activity['registered'] == 1:
+            if 'type_acti_code' in activity and activity['type_acti_code'] == 'proj':
+                projets.append(activity)
+
+    return projets
+
 # update callendar from monday of current week
 current_date = datetime.today()
-monday_date = current_date - timedelta(days=current_date.weekday())
+monday_of_current_week = current_date - timedelta(days=current_date.weekday())
 
-my_events = get_my_epitech_events(date_from=monday_date)
+my_events = get_my_epitech_events(start=monday_of_current_week)
 
-print(f'{len(my_events)} event registered:')
+print(f'{len(my_events)} events registered:')
 for event in my_events:
     if 'rdv_group_registered' in event and event['rdv_group_registered'] is not None:
-        print('grp ' + event['rdv_group_registered'] +  ' ' + event['acti_title'])
+        event_start, event_end = event['rdv_group_registered'].split('|')
     elif 'rdv_indiv_registered' in event and event['rdv_indiv_registered'] is not None:
-        print('ind ' + event['rdv_indiv_registered'] + ' ' + event['acti_title'])
+        event_start, event_end = event['rdv_indiv_registered'].split('|')
     else:
-        print('other ' + event['start'] + '|' + event['end'] + ' ' + event['acti_title'])
+        event_start = event['start']
+        event_end = event['end']
+    
+    print(event_start + ' - ' + event_end + '\t-> ' + event['acti_title'])
+
+print()
+
+my_projects = get_my_epitech_registered_projects(start=monday_of_current_week)
+print(f'{len(my_projects)} projets registered:')
+for project in my_projects:
+    print(project['begin_acti'] + ' ' + project['end_acti'] + '\t-> ' + project['acti_title'])
