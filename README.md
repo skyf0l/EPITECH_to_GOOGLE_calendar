@@ -4,8 +4,7 @@ Synchronize your Epitech calendar with Google.
 # Features
   - [ ] Easy installation
   - [x] Add new events to the Google calendar
-  - [x] Add location and description to events
-  - [ ] Add location, event link and description of event
+  - [x] Add location, event link and description of event
   - [ ] Remove canceled events
   - [ ] Update events which have been moved in Epitech calendar
   - [x] Display only the selected slot for multi-stots events
