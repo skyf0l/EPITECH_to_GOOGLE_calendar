@@ -3,6 +3,7 @@
 import requests
 from datetime import datetime, timedelta
 
+
 # format: start/end => datetime
 # get_epitech_events() => all after one month before today
 # get_epitech_events(start) => all after start
