@@ -31,6 +31,30 @@ def get_event_location(event):
     return ''
 
 
+def make_event_description(event):
+    description = ''
+
+    if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and event.get('codeacti'):
+        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{event['codeacti']}/"
+        description += f"<a href=\"{event_url}\">{event['acti_title']}</a>"
+        description += '<br>'
+
+    description += '#$event=' + event['codeacti']
+    return description
+
+
+def make_project_description(project):
+    description = ''
+
+    if project.get('scolaryear') and project.get('codemodule') and project.get('codeinstance') and project.get('codeacti'):
+        event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{project['codeacti']}/project/#!/group"
+        description += f"<a href=\"{event_url}\">{project['acti_title']}</a>"
+        description += '<br>'
+
+    description += '#$project=' + project['codeacti']
+    return description
+
+
 # add event to google calendar
 
 def add_google_calendar_event(calendarID, event):
@@ -39,7 +63,7 @@ def add_google_calendar_event(calendarID, event):
     googleEvent = {
         'summary': event['codemodule'] + ' - ' + event['acti_title'],
         'location': get_event_location(event),
-        'description': '#event=' + event['codeevent'],
+        'description': make_event_description(event),
         'start': {
             'dateTime': event_start.replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
@@ -57,7 +81,7 @@ def add_google_calendar_event(calendarID, event):
 def add_google_calendar_project(calendarID, project):
     googleEvent = {
         'summary': project['codemodule'] + ' - ' + project['acti_title'],
-        'description': '#project=' + project['codeacti'],
+        'description': make_project_description(project),
         'start': {
             'dateTime': project['begin_acti'].replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
@@ -91,7 +115,7 @@ def get_google_events(calendarID, start=None, end=None):
         google_events = service.events().list(calendarId=calendarID, pageToken=page_token,
                                               timeZone='Europe/Paris', timeMin=start, timeMax=end).execute()
         for event in google_events['items']:
-            if 'description' in event and '#event=' in event['description']:
+            if 'description' in event and '#$event=' in event['description']:
                 events.append(event)
         page_token = google_events.get('nextPageToken')
         if not page_token:
@@ -120,7 +144,7 @@ def get_google_projects(calendarID, start=None, end=None):
         google_projects = service.events().list(calendarId=calendarID, pageToken=page_token,
                                               timeZone='Europe/Paris', timeMin=start, timeMax=end).execute()
         for event in google_projects['items']:
-            if 'description' in event and '#project=' in event['description']:
+            if 'description' in event and '#$project=' in event['description']:
                 projects.append(event)
         page_token = google_projects.get('nextPageToken')
         if not page_token:
@@ -135,14 +159,20 @@ def delete_google_event(calendarID, googleEvent):
     service.events().delete(calendarId=calendarID, eventId=eventID, sendNotifications=False).execute()
 
 
+# delete events from google calendar
+
+def delete_google_events(calendarID, googleEvents):
+    for googleEvent in googleEvents:
+        delete_google_event(calendarID, googleEvent)
+
+
 # clear all events from google calendar
 
 def clear_google_events(calendarID):
     page_token = None
     while True:
         google_projects = service.events().list(calendarId=calendarID, pageToken=page_token).execute()
-        for event in google_projects['items']:
-            delete_google_event(calendarID, event)
+        delete_google_events(calendarID, google_projects['items'])
         page_token = google_projects.get('nextPageToken')
         if not page_token:
             break
