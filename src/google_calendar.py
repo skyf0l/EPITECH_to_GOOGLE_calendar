@@ -126,3 +126,23 @@ def get_google_projects(calendarID, start=None, end=None):
         if not page_token:
             break
     return projects
+
+
+# delete event from google calendar
+
+def delete_google_event(calendarID, googleEvent):
+    eventID = googleEvent['id']
+    service.events().delete(calendarId=calendarID, eventId=eventID, sendNotifications=False).execute()
+
+
+# clear all events from google calendar
+
+def clear_google_events(calendarID):
+    page_token = None
+    while True:
+        google_projects = service.events().list(calendarId=calendarID, pageToken=page_token).execute()
+        for event in google_projects['items']:
+            delete_google_event(calendarID, event)
+        page_token = google_projects.get('nextPageToken')
+        if not page_token:
+            break

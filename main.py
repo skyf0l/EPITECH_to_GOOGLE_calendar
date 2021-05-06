@@ -19,6 +19,8 @@ config = json.load(open('config.json'))
 CALENDAR_ID_EVENTS = config['calendarID_events']
 CALENDAR_ID_TIMELINE = config['calendarID_timeline']
 
+clear_google_events(CALENDAR_ID_EVENTS)
+clear_google_events(CALENDAR_ID_TIMELINE)
 
 # update callendar from monday of current week from 0 am
 if len(argv) == 2:
@@ -33,6 +35,7 @@ google_projects = get_google_projects(CALENDAR_ID_TIMELINE, start=monday_of_curr
 
 print(f'Already {len(google_events)} events in google calendar')
 print(f'Already {len(google_projects)} projects in google calendar')
+print()
 
 my_events = get_my_epitech_events(EPITECH_AUTOLOGIN, start=monday_of_current_week)
 
