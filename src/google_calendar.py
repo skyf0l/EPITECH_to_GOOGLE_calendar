@@ -25,6 +25,22 @@ if not creds or creds.invalid:
 service = build('calendar', 'v3', http=creds.authorize(Http()))
 
 
+def get_google_event_code(googleEvent):
+    match = re.search('#(?:event|project)=([\w-]*)!', googleEvent['description'])
+    if match is None or len(match.groups()) != 1:
+        return None
+    return match.groups()[0]
+
+
+def get_google_event_codes(events):
+    event_codes = []
+    for event in events:
+        event_code = get_google_event_code(event)
+        if event_code not in event_codes:
+            event_codes.append(event_code)
+    return event_codes
+
+
 def get_event_location(event):
     if event.get('room') is not None:
         if event['room'].get('code') is not None:

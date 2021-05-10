@@ -4,6 +4,19 @@ import requests
 from datetime import datetime, timedelta
 
 
+def get_event_code(event):
+    return event['codeacti']
+
+
+def get_event_codes(events):
+    event_codes = []
+    for event in events:
+        event_code = get_event_code(event)
+        if event_code not in event_codes:
+            event_codes.append(event_code)
+    return event_codes
+
+
 # format: start/end => datetime
 # get_epitech_events() => all after one month before today
 # get_epitech_events(start) => all after start
@@ -51,7 +64,7 @@ def get_my_epitech_activities(epitechAutologin, start=None, end=None):
 
 # same as get_my_epitech_activities but keep only registered projects
 
-def get_my_epitech_registered_projects(epitechAutologin, start=None, end=None):
+def get_my_epitech_projects(epitechAutologin, start=None, end=None):
     activities = get_my_epitech_activities(epitechAutologin, start, end)
     projets = []
 

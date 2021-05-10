@@ -11,4 +11,4 @@ CALENDAR_ID_TIMELINE = config['calendarID_timeline']
 event_deleted = clear_google_events(CALENDAR_ID_EVENTS)
 print(f'{event_deleted} events removed')
 projects_deleted = clear_google_events(CALENDAR_ID_TIMELINE)
-print(f'{projects_deleted} events removed')
+print(f'{projects_deleted} projects removed')
