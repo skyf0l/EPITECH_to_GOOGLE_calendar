@@ -1,5 +1,7 @@
 {
+    "epitech_autologin": "auth-...",
     "calendarID_events": "...@group.calendar.google.com",
     "calendarID_timeline": "...@group.calendar.google.com",
-    "calendarID_teaching_team": "...@group.calendar.google.com"
+    "calendarID_teaching_team": "...@group.calendar.google.com",
+    "teaching_modules": ["B-INN-0000"]
 }
