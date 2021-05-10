@@ -84,3 +84,9 @@ def get_epitech_event_date(event):
     elif 'rdv_indiv_registered' in event and event['rdv_indiv_registered'] is not None:
         return event['rdv_indiv_registered'].split('|')
     return event['start'], event['end']
+
+
+# return right (start, end) of project
+
+def get_epitech_project_date(project):
+    return project['begin_acti'], project['end_acti']

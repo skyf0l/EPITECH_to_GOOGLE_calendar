@@ -28,13 +28,28 @@ def update_events(calendarID, google_events, my_events):
     print(f'{len(my_events)} events registered:')
     for event in my_events:
         if event['codeacti'] not in google_event_codes:
-            event_start, event_end = get_epitech_event_date(event)
+            # add
             print(f'[+] {event["acti_title"]}')
             add_google_calendar_event(calendarID, event)
             add_event_count += 1
+        else:
+            # update
+            for google_event in google_events:
+                if event['codeacti'] == get_google_event_code(google_event):
+                    event_start, event_end = get_epitech_event_date(event)
+                    google_event_start, google_event_end = get_google_event_date(google_event)
+                    if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
+                        print(f'[&] date / {google_event["summary"]}')
+                        google_event['start']['dateTime'] =  str(event_start).replace(' ', 'T')
+                        google_event['start']['timeZone'] = 'Europe/Paris'
+                        google_event['end']['dateTime'] =  str(event_end).replace(' ', 'T')
+                        google_event['end']['timeZone'] = 'Europe/Paris'
+                        service.events().update(calendarId=calendarID, eventId=google_event['id'], body=google_event).execute()
+                        update_event_count += 1
 
     epitech_event_codes = get_event_codes(my_events)
     for google_event in google_events:
+        # remove
         if get_google_event_code(google_event) not in epitech_event_codes:
             print(f'[-] {google_event["summary"]}')
             delete_google_event(calendarID, google_event)
@@ -57,13 +72,29 @@ def update_projects(calendarID, google_projects, my_projects):
     print(f'{len(my_projects)} projets registered:')
     for project in my_projects:
         if project['codeacti'] not in google_project_codes:
+            # add
             print(f'[+] {project["acti_title"]}')
             add_google_calendar_project(calendarID, project)
             add_project_count += 1
+        else:
+            # update
+            for google_project in google_projects:
+                if project['codeacti'] == get_google_event_code(google_project):
+                    event_start, event_end = get_epitech_project_date(project)
+                    google_event_start, google_event_end = get_google_event_date(google_project)
+                    if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
+                        print(f'[&] date / {google_project["summary"]}')
+                        google_project['start']['dateTime'] =  str(event_start).replace(' ', 'T')
+                        google_project['start']['timeZone'] = 'Europe/Paris'
+                        google_project['end']['dateTime'] =  str(event_end).replace(' ', 'T')
+                        google_project['end']['timeZone'] = 'Europe/Paris'
+                        service.events().update(calendarId=calendarID, eventId=google_project['id'], body=google_project).execute()
+                        update_project_count += 1
 
     epitech_project_codes = get_event_codes(my_projects)
     for google_project in google_projects:
         if get_google_event_code(google_project) not in epitech_project_codes:
+            # remove
             print(f'[-] {google_project["summary"]}')
             delete_google_event(calendarID, google_project)
             removed_project_count += 1

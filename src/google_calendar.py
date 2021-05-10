@@ -169,6 +169,14 @@ def get_google_projects(calendarID, start=None, end=None):
     return projects
 
 
+# return right (start, end) of event
+
+def get_google_event_date(event):
+    start = datetime.strptime(event['start']['dateTime'].split('+')[0], '%Y-%m-%dT%H:%M:%S')
+    end = datetime.strptime(event['end']['dateTime'].split('+')[0], '%Y-%m-%dT%H:%M:%S')
+    return start, end
+
+
 # delete event from google calendar
 
 def delete_google_event(calendarID, googleEvent):
