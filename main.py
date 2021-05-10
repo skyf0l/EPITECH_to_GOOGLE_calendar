@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 
 # config
 config.load_config_file('config.json')
+print(f'Epitech profile: {config.EPITECH_LOGIN}\n')
 
 # update callendar from monday of current week from 0 am
 if len(argv) == 2:
