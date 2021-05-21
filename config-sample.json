@@ -1,7 +1,10 @@
-{
-    "epitech_autologin": "auth-...",
-    "calendarID_events": "...@group.calendar.google.com",
-    "calendarID_timeline": "...@group.calendar.google.com",
-    "calendarID_teaching_team": "...@group.calendar.google.com",
-    "calendarID_other_calendars": "...@group.calendar.google.com"
-}
+[
+    {
+        "comment": "student / aer ...",
+        "epitech_autologin": "auth-...",
+        "calendarID_events": "...@group.calendar.google.com",
+        "calendarID_timeline": "...@group.calendar.google.com",
+        "calendarID_teaching_team": "...@group.calendar.google.com",
+        "calendarID_other_calendars": "...@group.calendar.google.com"
+    }
+]

@@ -56,7 +56,7 @@ def update_events(calendarID, google_events, my_events):
             removed_event_count += 1
 
     if add_event_count != 0 or update_event_count != 0 or removed_event_count != 0:
-        print('Events summary:')
+        print('-> Events summary:')
         if add_event_count != 0:
             print(f'\t{add_event_count} events added')
         if update_event_count != 0:
@@ -64,7 +64,7 @@ def update_events(calendarID, google_events, my_events):
         if removed_event_count != 0:
             print(f'\t{removed_event_count} events removed')
     else:
-        print('Up to date')
+        print('\tUp to date')
 
 
 def update_projects(calendarID, google_projects, my_projects):
@@ -105,7 +105,7 @@ def update_projects(calendarID, google_projects, my_projects):
             removed_project_count += 1
 
     if add_project_count != 0 or update_project_count != 0 or removed_project_count != 0:
-        print('Projects summary:')
+        print('-> Projects summary:')
         if add_project_count != 0:
             print(f'\t{add_project_count} projets added')
         if update_project_count != 0:
@@ -113,7 +113,7 @@ def update_projects(calendarID, google_projects, my_projects):
         if removed_project_count != 0:
             print(f'\t{removed_project_count} projets removed')
     else:
-        print('Up to date')
+        print('\tUp to date')
 
 
 def update_other_calendars_events(calendarID, google_events, my_events):
@@ -154,7 +154,7 @@ def update_other_calendars_events(calendarID, google_events, my_events):
             removed_event_count += 1
 
     if add_event_count != 0 or update_event_count != 0 or removed_event_count != 0:
-        print('Events from other calendars summary:')
+        print('-> Events from other calendars summary:')
         if add_event_count != 0:
             print(f'\t{add_event_count} events added')
         if update_event_count != 0:
@@ -162,4 +162,4 @@ def update_other_calendars_events(calendarID, google_events, my_events):
         if removed_event_count != 0:
             print(f'\t{removed_event_count} events removed')
     else:
-        print('Up to date')
+        print('\tUp to date')
