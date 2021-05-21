@@ -26,16 +26,16 @@ def main():
         print(f'Epitech profile: {EPITECH_LOGIN}')
 
         if CALENDAR_ID_EVENTS is not None:
-            event_deleted = clear_google_events(CALENDAR_ID_EVENTS)
+            event_deleted = clear_google_events(CALENDAR_ID_EVENTS, where=lambda event: event.get('description') is not None and re.search('#event=([\w-]*)!', event['description']))
             print(f'-> {event_deleted} events removed from calendarId_events')
         if CALENDAR_ID_TIMELINE is not None:
-            event_deleted = clear_google_events(CALENDAR_ID_TIMELINE)
+            event_deleted = clear_google_events(CALENDAR_ID_TIMELINE, where=lambda event: event.get('description') is not None and re.search('#project=([\w-]*)!', event['description']))
             print(f'-> {event_deleted} events removed from calendarId_timeline')
         if CALENDAR_ID_TEACHING_TEAM is not None:
-            event_deleted = clear_google_events(CALENDAR_ID_TEACHING_TEAM)
+            event_deleted = clear_google_events(CALENDAR_ID_TEACHING_TEAM, where=lambda event: event.get('description') is not None and re.search('#assistant=([\w-]*)!', event['description']))
             print(f'-> {event_deleted} events removed from calendarId_teaching_team')
         if CALENDAR_ID_OTHER_CALENDARS is not None:
-            event_deleted = clear_google_events(CALENDAR_ID_OTHER_CALENDARS)
+            event_deleted = clear_google_events(CALENDAR_ID_OTHER_CALENDARS, where=lambda event: event.get('description') is not None and re.search('#other_calendar_event=([\w-]*)!', event['description']))
             print(f'-> {event_deleted} events removed from calendarId_other_calendars')
 
         print()
