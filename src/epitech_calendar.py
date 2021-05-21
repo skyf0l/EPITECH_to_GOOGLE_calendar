@@ -17,12 +17,25 @@ def get_event_codes(events):
     return event_codes
 
 
-# format: start/end => datetime
-# get_epitech_events() => all after one month before today
-# get_epitech_events(start) => all after start
-# get_epitech_events(end) => all in one month before end and end
+def get_other_calendars_event_code(event):
+    return f'{event["id_calendar"]}-{event["id"]}'
 
-def get_epitech_events(epitechAutologin, start=None, end=None):
+
+def get_other_calendars_event_codes(events):
+    event_codes = []
+    for event in events:
+        event_code = get_other_calendars_event_code(event)
+        if event_code not in event_codes:
+            event_codes.append(event_code)
+    return event_codes
+
+
+# format: start/end => datetime
+# get_all_epitech_events() => all after one month before today
+# get_all_epitech_events(start) => all after start
+# get_all_epitech_events(end) => all in one month before end and end
+
+def get_all_epitech_events(epitechAutologin, start=None, end=None):
     url = f'https://intra.epitech.eu/{epitechAutologin}/planning/load?format=json'
     if start is not None:
         url += '&start=' + start.strftime('%Y-%m-%d')
@@ -31,16 +44,39 @@ def get_epitech_events(epitechAutologin, start=None, end=None):
     return requests.get(url).json()
 
 
-# same as get_epitech_events but keep only registered events
+# same as get_all_epitech_events but keep only registered epitech events
 # /!\ english delivery not marked as registered
 
 def get_my_epitech_events(epitechAutologin, start=None, end=None):
-    events = get_epitech_events(epitechAutologin, start=start, end=end)
+    events = get_all_epitech_events(epitechAutologin, start=start, end=end)
     events_registered = []
     for event in events:
-        if 'event_registered' in event and event['event_registered'] is not False:
-            events_registered.append(event)
+        if 'scolaryear' in event:
+            if 'event_registered' in event and event['event_registered'] not in [None, False]:
+                events_registered.append(event)
     return events_registered
+
+
+# same as get_all_epitech_events but keep only other calendar events
+
+def get_epitech_other_calendars_events(epitechAutologin, start=None, end=None):
+    events = get_all_epitech_events(epitechAutologin, start=start, end=end)
+    other_calendars_events = []
+    for event in events:
+        if 'id_calendar' in event and 'id' in event:
+            other_calendars_events.append(event)
+    return other_calendars_events
+
+
+# same as get_all_epitech_events but keep only registered other calendar events
+
+def get_my_epitech_other_calendars_events(epitechAutologin, start=None, end=None):
+    other_calendars_events = get_epitech_other_calendars_events(epitechAutologin, start=start, end=end)
+    other_calendars_events_registered = []
+    for event in other_calendars_events:
+        if 'event_registered' in event and event['event_registered'] not in [None, False]:
+            other_calendars_events_registered.append(event)
+    return other_calendars_events_registered
 
 
 # format: start/end => datetime

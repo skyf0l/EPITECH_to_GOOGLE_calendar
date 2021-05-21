@@ -10,6 +10,7 @@ def remove_duplicate_google_events(calendarID, events):
     for event in events:
         event_code = get_google_event_code(event)
         if event_code in event_codes:
+            print(f'[-] duplicate {event["summary"]}')
             delete_google_event(calendarID, event)
         else:
             event_codes.append(event_code)
@@ -25,7 +26,6 @@ def update_events(calendarID, google_events, my_events):
     update_event_count = 0
     removed_event_count = 0
 
-    print(f'{len(my_events)} events registered:')
     for event in my_events:
         if event['codeacti'] not in google_event_codes:
             # add
@@ -55,10 +55,16 @@ def update_events(calendarID, google_events, my_events):
             delete_google_event(calendarID, google_event)
             removed_event_count += 1
 
-    print('Events summary:')
-    print(f'\t{add_event_count} events added')
-    print(f'\t{update_event_count} events updated')
-    print(f'\t{removed_event_count} events removed')
+    if add_event_count != 0 or update_event_count != 0 or removed_event_count != 0:
+        print('Events summary:')
+        if add_event_count != 0:
+            print(f'\t{add_event_count} events added')
+        if update_event_count != 0:
+            print(f'\t{update_event_count} events updated')
+        if removed_event_count != 0:
+            print(f'\t{removed_event_count} events removed')
+    else:
+        print('Up to date')
 
 
 def update_projects(calendarID, google_projects, my_projects):
@@ -69,7 +75,6 @@ def update_projects(calendarID, google_projects, my_projects):
     update_project_count = 0
     removed_project_count = 0
 
-    print(f'{len(my_projects)} projets registered:')
     for project in my_projects:
         if project['codeacti'] not in google_project_codes:
             # add
@@ -99,7 +104,62 @@ def update_projects(calendarID, google_projects, my_projects):
             delete_google_event(calendarID, google_project)
             removed_project_count += 1
 
-    print('Projects summary:')
-    print(f'\t{add_project_count} projets added')
-    print(f'\t{update_project_count} projets updated')
-    print(f'\t{removed_project_count} projets removed')
+    if add_project_count != 0 or update_project_count != 0 or removed_project_count != 0:
+        print('Projects summary:')
+        if add_project_count != 0:
+            print(f'\t{add_project_count} projets added')
+        if update_project_count != 0:
+            print(f'\t{update_project_count} projets updated')
+        if removed_project_count != 0:
+            print(f'\t{removed_project_count} projets removed')
+    else:
+        print('Up to date')
+
+
+def update_other_calendars_events(calendarID, google_events, my_events):
+    google_events = remove_duplicate_google_events(calendarID, google_events)
+    google_event_codes = get_google_event_codes(google_events)
+
+    add_event_count = 0
+    update_event_count = 0
+    removed_event_count = 0
+
+    for event in my_events:
+        if get_other_calendars_event_code(event) not in google_event_codes:
+            # add
+            print(f'[+] {event["title"]} (id: {event["id"]}, id_calendar: {event["id_calendar"]})')
+            add_google_calendar_other_calendars_event(calendarID, event)
+            add_event_count += 1
+        else:
+            # update
+            for google_event in google_events:
+                if get_other_calendars_event_code(event) == get_google_event_code(google_event):
+                    event_start, event_end = get_epitech_event_date(event)
+                    google_event_start, google_event_end = get_google_event_date(google_event)
+                    if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
+                        print(f'[&] date / {event["title"]} (id: {event["id"]}, id_calendar: {event["id_calendar"]})')
+                        google_event['start']['dateTime'] =  str(event_start).replace(' ', 'T')
+                        google_event['start']['timeZone'] = 'Europe/Paris'
+                        google_event['end']['dateTime'] =  str(event_end).replace(' ', 'T')
+                        google_event['end']['timeZone'] = 'Europe/Paris'
+                        service.events().update(calendarId=calendarID, eventId=google_event['id'], body=google_event).execute()
+                        update_event_count += 1
+
+    epitech_event_codes = get_other_calendars_event_codes(my_events)
+    for google_event in google_events:
+        # remove
+        if get_google_event_code(google_event) not in epitech_event_codes:
+            print(f'[-] {google_event["summary"]})')
+            delete_google_event(calendarID, google_event)
+            removed_event_count += 1
+
+    if add_event_count != 0 or update_event_count != 0 or removed_event_count != 0:
+        print('Events from other calendars summary:')
+        if add_event_count != 0:
+            print(f'\t{add_event_count} events added')
+        if update_event_count != 0:
+            print(f'\t{update_event_count} events updated')
+        if removed_event_count != 0:
+            print(f'\t{removed_event_count} events removed')
+    else:
+        print('Up to date')

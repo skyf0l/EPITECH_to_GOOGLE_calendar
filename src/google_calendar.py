@@ -26,7 +26,7 @@ service = build('calendar', 'v3', http=creds.authorize(Http()))
 
 
 def get_google_event_code(googleEvent):
-    match = re.search('#(?:event|project)=([\w-]*)!', googleEvent['description'])
+    match = re.search('#(?:event|project|other_calendar_event)=([\w-]*)!', googleEvent['description'])
     if match is None or len(match.groups()) != 1:
         return None
     return match.groups()[0]
@@ -45,6 +45,8 @@ def get_event_location(event):
     if event.get('room') is not None:
         if event['room'].get('code') is not None:
             return event['room']['code']
+    if event.get('location') is not None:
+        return event['location']
     return ''
 
 
@@ -69,6 +71,17 @@ def make_project_description(project):
         description += '<br>'
 
     description += f"#project={project['codeacti']}!"
+    return description
+
+
+def make_other_calendar_event_description(event):
+    description = ''
+
+    if event.get('description') and len(event['description']) != 0:
+        description += event['description']
+        description += '<br>'
+
+    description += f"#other_calendar_event={event['id_calendar']}-{event['id']}!"
     return description
 
 
@@ -111,9 +124,26 @@ def add_google_calendar_project(calendarID, project):
     service.events().insert(calendarId=calendarID, body=googleEvent).execute()
 
 
-# get events from google calendar
+# add other calendars event to google calendar
 
-def get_google_events(calendarID, start=None, end=None):
+def add_google_calendar_other_calendars_event(calendarID, event):
+    googleEvent = {
+        'summary': event['title'],
+        'location': get_event_location(event),
+        'description': make_other_calendar_event_description(event),
+        'start': {
+            'dateTime': event['start'].replace(' ', 'T'),
+            'timeZone': 'Europe/Paris'
+        },
+        'end': {
+            'dateTime': event['end'].replace(' ', 'T'),
+            'timeZone': 'Europe/Paris'
+        },
+    }
+    service.events().insert(calendarId=calendarID, body=googleEvent).execute()
+
+
+def get_google_activities(calendarID, code, start=None, end=None):
     if start is None and end is None:
         current_date = datetime.today()
         start = current_date - timedelta(days=current_date.weekday())
@@ -132,41 +162,29 @@ def get_google_events(calendarID, start=None, end=None):
         google_events = service.events().list(calendarId=calendarID, pageToken=page_token,
                                               timeZone='Europe/Paris', timeMin=start, timeMax=end).execute()
         for event in google_events['items']:
-            if 'description' in event and re.search('#event=[\w-]*!', event['description']) is not None:
+            if 'description' in event and re.search(f'#{code}=[\\w-]*!', event['description']) is not None:
                 events.append(event)
         page_token = google_events.get('nextPageToken')
         if not page_token:
             break
     return events
 
+# get events from google calendar
+
+def get_google_events(calendarID, start=None, end=None):
+    return get_google_activities(calendarID, 'event', start, end)
+
 
 # get projects from google calendar
 
 def get_google_projects(calendarID, start=None, end=None):
-    if start is None and end is None:
-        current_date = datetime.today()
-        start = current_date - timedelta(days=current_date.weekday())
-        end = start + timedelta(weeks=1)
-    elif start is None:
-        start = end - timedelta(days=31)
-    elif end is None:
-        end = start + timedelta(days=365)
-    start = start.isoformat() + 'Z'
-    end = end.isoformat() + 'Z'
+    return get_google_activities(calendarID, 'project', start, end)
 
-    projects = []
 
-    page_token = None
-    while True:
-        google_projects = service.events().list(calendarId=calendarID, pageToken=page_token,
-                                              timeZone='Europe/Paris', timeMin=start, timeMax=end).execute()
-        for event in google_projects['items']:
-            if 'description' in event and re.search('#project=[\w-]*!', event['description']) is not None:
-                projects.append(event)
-        page_token = google_projects.get('nextPageToken')
-        if not page_token:
-            break
-    return projects
+# get projects from google calendar
+
+def get_google_other_calendars_events(calendarID, start=None, end=None):
+    return get_google_activities(calendarID, 'other_calendar_event', start, end)
 
 
 # return right (start, end) of event

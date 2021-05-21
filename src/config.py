@@ -9,6 +9,7 @@ EPITECH_LOGIN = None
 CALENDAR_ID_EVENTS = None
 CALENDAR_ID_TIMELINE = None
 CALENDAR_ID_TEACHING_TEAM = None
+CALENDAR_ID_OTHER_CALENDARS = None
 
 
 def get_epitech_login(epitechAutologin):
@@ -23,6 +24,7 @@ def load_config_file(file_path):
     global CALENDAR_ID_EVENTS
     global CALENDAR_ID_TIMELINE
     global CALENDAR_ID_TEACHING_TEAM
+    global CALENDAR_ID_OTHER_CALENDARS
 
     config = json.load(open(file_path))
     EPITECH_AUTOLOGIN = config['epitech_autologin']
@@ -30,3 +32,4 @@ def load_config_file(file_path):
     CALENDAR_ID_EVENTS = config['calendarID_events']
     CALENDAR_ID_TIMELINE = config['calendarID_timeline']
     CALENDAR_ID_TEACHING_TEAM = config['calendarID_teaching_team']
+    CALENDAR_ID_OTHER_CALENDARS = config['calendarID_other_calendars']
