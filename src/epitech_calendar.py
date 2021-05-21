@@ -56,29 +56,6 @@ def get_my_epitech_events(epitechAutologin, start=None, end=None):
                 events_registered.append(event)
     return events_registered
 
-
-# same as get_all_epitech_events but keep only other calendar events
-
-def get_epitech_other_calendars_events(epitechAutologin, start=None, end=None):
-    events = get_all_epitech_events(epitechAutologin, start=start, end=end)
-    other_calendars_events = []
-    for event in events:
-        if 'id_calendar' in event and 'id' in event:
-            other_calendars_events.append(event)
-    return other_calendars_events
-
-
-# same as get_all_epitech_events but keep only registered other calendar events
-
-def get_my_epitech_other_calendars_events(epitechAutologin, start=None, end=None):
-    other_calendars_events = get_epitech_other_calendars_events(epitechAutologin, start=start, end=end)
-    other_calendars_events_registered = []
-    for event in other_calendars_events:
-        if 'event_registered' in event and event['event_registered'] not in [None, False]:
-            other_calendars_events_registered.append(event)
-    return other_calendars_events_registered
-
-
 # format: start/end => datetime
 # get_my_epitech_activities() => current week
 # get_my_epitech_activities(start) => all after start included
@@ -110,6 +87,36 @@ def get_my_epitech_projects(epitechAutologin, start=None, end=None):
                 projets.append(activity)
 
     return projets
+
+
+# same as get_my_epitech_activities but keep only assistant events
+
+def get_my_assistant_events(epitechAutologin, start=None, end=None):
+    events = []
+
+    return events
+
+
+# same as get_all_epitech_events but keep only other calendar events
+
+def get_epitech_other_calendars_events(epitechAutologin, start=None, end=None):
+    events = get_all_epitech_events(epitechAutologin, start=start, end=end)
+    other_calendars_events = []
+    for event in events:
+        if 'id_calendar' in event and 'id' in event:
+            other_calendars_events.append(event)
+    return other_calendars_events
+
+
+# same as get_all_epitech_events but keep only registered other calendar events
+
+def get_my_epitech_other_calendars_events(epitechAutologin, start=None, end=None):
+    other_calendars_events = get_epitech_other_calendars_events(epitechAutologin, start=start, end=end)
+    other_calendars_events_registered = []
+    for event in other_calendars_events:
+        if 'event_registered' in event and event['event_registered'] not in [None, False]:
+            other_calendars_events_registered.append(event)
+    return other_calendars_events_registered
 
 
 # return right (start, end) of event

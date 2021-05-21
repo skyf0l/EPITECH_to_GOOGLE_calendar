@@ -181,7 +181,13 @@ def get_google_projects(calendarID, start=None, end=None):
     return get_google_activities(calendarID, 'project', start, end)
 
 
-# get projects from google calendar
+# get assistant events from google calendar
+
+def get_google_assistant_events(calendarID, start=None, end=None):
+    return get_google_activities(calendarID, 'assistant', start, end)
+
+
+# get other calendars events from google calendar
 
 def get_google_other_calendars_events(calendarID, start=None, end=None):
     return get_google_activities(calendarID, 'other_calendar_event', start, end)

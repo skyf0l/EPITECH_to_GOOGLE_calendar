@@ -52,6 +52,13 @@ for epitech_account in epitech_accounts:
         print(f'-> {len(my_projects)} projects registered in epitech calendar')
         update_projects(CALENDAR_ID_TIMELINE, google_projects, my_projects)
 
+    if CALENDAR_ID_TEACHING_TEAM is not None:
+        google_assistant_events = get_google_assistant_events(CALENDAR_ID_TEACHING_TEAM, start=monday_of_current_week)
+        print(f'-> Already {len(google_assistant_events)} projects in google calendar')
+        my_google_assistant_events = get_my_assistant_events(EPITECH_AUTOLOGIN, start=monday_of_current_week)
+        print(f'-> {len(my_projects)} projects registered in epitech calendar')
+        update_assistant_events(CALENDAR_ID_TIMELINE, google_assistant_events, my_google_assistant_events)
+
     if CALENDAR_ID_OTHER_CALENDARS is not None:
         google_other_calendars_events = get_google_other_calendars_events(CALENDAR_ID_OTHER_CALENDARS, start=monday_of_current_week)
         print(f'-> Already {len(google_other_calendars_events)} projects in google calendar')
