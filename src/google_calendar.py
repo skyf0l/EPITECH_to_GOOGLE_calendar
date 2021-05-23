@@ -76,6 +76,18 @@ def make_project_description(project):
     return description
 
 
+def make_assistant_description(event):
+    description = ''
+
+    if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
+        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_code(event)}/"
+        description += f"<a href=\"{event_url}\">Link {event['acti_title']}</a>"
+        description += '<br>'
+
+    description += f"#assistant={get_event_code(event)}!"
+    return description
+
+
 def make_other_calendar_event_description(event):
     description = ''
 
@@ -120,6 +132,27 @@ def add_google_calendar_project(calendarID, project):
         },
         'end': {
             'dateTime': project['end_acti'].replace(' ', 'T'),
+            'timeZone': 'Europe/Paris'
+        },
+    }
+    service.events().insert(calendarId=calendarID, body=googleEvent).execute()
+
+
+# add event to google calendar
+
+def add_google_calendar_assistant(calendarID, event):
+    event_start, event_end = get_epitech_event_date(event)
+
+    googleEvent = {
+        'summary': event['codemodule'] + ' >> ' + event['acti_title'],
+        'location': get_event_location(event),
+        'description': make_assistant_description(event),
+        'start': {
+            'dateTime': event_start.replace(' ', 'T'),
+            'timeZone': 'Europe/Paris'
+        },
+        'end': {
+            'dateTime': event_end.replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
         },
     }

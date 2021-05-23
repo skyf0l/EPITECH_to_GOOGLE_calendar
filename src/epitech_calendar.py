@@ -4,6 +4,26 @@ import requests
 from datetime import datetime, timedelta
 
 
+def get_epitech_login(epitechAutologin):
+    url = f'https://intra.epitech.eu/{epitechAutologin}/user/?format=json'
+    user_data = requests.get(url).json()
+    return user_data['login']
+
+
+# get_all_epitech_events() => all after one month before today
+# get_all_epitech_events(start) => all after start
+# get_all_epitech_events(end) => all in one month before end and end
+def compute_start_end(start, end):
+    if start is None and end is None:
+        current_date = datetime.today()
+        start = current_date - timedelta(days=current_date.weekday())
+        end = start + timedelta(weeks=1)
+    elif start is None:
+        start = end - timedelta(days=31)
+    elif end is None:
+        end = start + timedelta(days=365)
+    return start, end
+
 def get_event_code(event):
     if event.get('codeacti') is not None:
         return event['codeacti']
@@ -24,7 +44,6 @@ def get_event_codes(events):
 def get_other_calendars_event_code(event):
     return f'{event["id_calendar"]}-{event["id"]}'
 
-
 def get_other_calendars_event_codes(events):
     event_codes = []
     for event in events:
@@ -34,12 +53,11 @@ def get_other_calendars_event_codes(events):
     return event_codes
 
 
-# format: start/end => datetime
-# get_all_epitech_events() => all after one month before today
-# get_all_epitech_events(start) => all after start
-# get_all_epitech_events(end) => all in one month before end and end
+# start and end null => all after one month before today
+# start null => all after start
+# end null => all in one month before end and end
 
-def get_all_epitech_events(epitechAutologin, start=None, end=None):
+def get_all_epitech_events(epitechAutologin, start: datetime = None, end: datetime = None):
     url = f'https://intra.epitech.eu/{epitechAutologin}/planning/load?format=json'
     if start is not None:
         url += '&start=' + start.strftime('%Y-%m-%d')
@@ -66,14 +84,7 @@ def get_my_epitech_events(epitechAutologin, start=None, end=None):
 # get_all_epitech_activities(end) => all in one month before end and end
 
 def get_all_epitech_activities(epitechAutologin, start=None, end=None):
-    if start is None and end is None:
-        current_date = datetime.today()
-        start = current_date - timedelta(days=current_date.weekday())
-        end = start + timedelta(weeks=1)
-    elif start is None:
-        start = end - timedelta(days=31)
-    elif end is None:
-        end = start + timedelta(days=365)
+    start, end = compute_start_end(start, end)
 
     url = f'https://intra.epitech.eu/{epitechAutologin}/module/board/?format=json&start={start.strftime("%Y-%m-%d")}&end={end.strftime("%Y-%m-%d")}'
     return requests.get(url).json()
@@ -100,9 +111,32 @@ def get_module_activities(epitechAutologin, module_name):
     return requests.get(url).json()['activites']
 
 
+def is_assistant(epitechLogin, event):
+    for assistant in event['assistants']:
+        if assistant['login'] == epitechLogin:
+            return True
+    return False
+
+
+def format_assistant_event(activity, event, module_name):
+    scolaryear, codemodule, codeinstance = module_name.split('/')
+    return {
+        'scolaryear': scolaryear,
+        'codemodule': codemodule,
+        'codeinstance': codeinstance,
+        'codeacti': activity['codeacti'],
+        'codeevent': event['code'],
+        'acti_title': activity['title'],
+        'start': event['begin'],
+        'end': event['end'],
+        'location': event['location']
+    }
+
+
 # same as get_all_epitech_activities but keep only assistant events
 
-def get_my_assistant_events(epitechAutologin, start=None, end=None):
+def get_my_assistant_events(epitechAutologin, epitechLogin, start=None, end=None):
+    start, end = compute_start_end(start, end)
     events = get_all_epitech_activities(epitechAutologin, start=start, end=end)
     assistant_events = []
 
@@ -115,8 +149,16 @@ def get_my_assistant_events(epitechAutologin, start=None, end=None):
     for module_name in modules_names:
         module_activities = get_module_activities(epitechAutologin, module_name)
         for module_activity in module_activities:
-            if len(module_activity['events']) > 1:
-                print(module_activity['title'], len(module_activity['events']))
+            for module_activity_event in module_activity['events']:
+                # check if date is valid
+                if start > datetime.fromisoformat(module_activity_event['begin']):
+                    continue
+                if end < datetime.fromisoformat(module_activity_event['end']):
+                    continue
+
+                if not is_assistant(epitechLogin, module_activity_event):
+                    continue
+                assistant_events.append(format_assistant_event(module_activity, module_activity_event, module_name))
     return assistant_events
 
 

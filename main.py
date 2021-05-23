@@ -9,12 +9,6 @@ from datetime import datetime, timedelta
 import json
 
 
-def get_epitech_login(epitechAutologin):
-    url = f'https://intra.epitech.eu/{epitechAutologin}/user/?format=json'
-    user_data = requests.get(url).json()
-    return user_data['login']
-
-
 # update callendar from monday of current week from 0 am
 if len(argv) == 2:
     current_date = datetime.strptime(argv[1], '%Y-%m-%d')
@@ -55,9 +49,9 @@ for epitech_account in epitech_accounts:
     if CALENDAR_ID_TEACHING_TEAM is not None:
         google_assistant_events = get_google_assistant_events(CALENDAR_ID_TEACHING_TEAM, start=monday_of_current_week)
         print(f'-> Already {len(google_assistant_events)} assistant events in google calendar')
-        my_google_assistant_events = get_my_assistant_events(EPITECH_AUTOLOGIN, start=monday_of_current_week)
+        my_google_assistant_events = get_my_assistant_events(EPITECH_AUTOLOGIN, EPITECH_LOGIN, start=monday_of_current_week)
         print(f'-> {len(my_google_assistant_events)} assistant events registered in epitech calendar')
-        update_assistant_events(CALENDAR_ID_TIMELINE, google_assistant_events, my_google_assistant_events)
+        update_assistant_events(CALENDAR_ID_TEACHING_TEAM, google_assistant_events, my_google_assistant_events)
 
     if CALENDAR_ID_OTHER_CALENDARS is not None:
         google_other_calendars_events = get_google_other_calendars_events(CALENDAR_ID_OTHER_CALENDARS, start=monday_of_current_week)

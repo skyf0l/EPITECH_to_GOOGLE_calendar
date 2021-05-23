@@ -125,19 +125,19 @@ def update_assistant_events(calendarID, google_assistant_events, my_assistant_ev
     removed_event_count = 0
 
     for event in my_assistant_events:
-        if get_other_calendars_event_code(event) not in google_assistant_event_codes:
+        if get_event_code(event) not in google_assistant_event_codes:
             # add
-            print(f'[+] {event["title"]} (id: {event["id"]}, id_calendar: {event["id_calendar"]})')
-            add_google_calendar_other_calendars_event(calendarID, event)
+            print(f'[+] {event["acti_title"]}')
+            add_google_calendar_assistant(calendarID, event)
             add_event_count += 1
         else:
             # update
             for google_event in google_assistant_events:
-                if get_other_calendars_event_code(event) == get_google_event_code(google_event):
+                if get_event_code(event) == get_google_event_code(google_event):
                     event_start, event_end = get_epitech_event_date(event)
                     google_event_start, google_event_end = get_google_event_date(google_event)
                     if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
-                        print(f'[&] date / {event["title"]} (id: {event["id"]}, id_calendar: {event["id_calendar"]})')
+                        print(f'[&] date / {google_event["summary"]}')
                         google_event['start']['dateTime'] =  str(event_start).replace(' ', 'T')
                         google_event['start']['timeZone'] = 'Europe/Paris'
                         google_event['end']['dateTime'] =  str(event_end).replace(' ', 'T')
@@ -145,11 +145,11 @@ def update_assistant_events(calendarID, google_assistant_events, my_assistant_ev
                         service.events().update(calendarId=calendarID, eventId=google_event['id'], body=google_event).execute()
                         update_event_count += 1
 
-    epitech_event_codes = get_other_calendars_event_codes(my_assistant_events)
+    epitech_event_codes = get_event_codes(my_assistant_events)
     for google_event in google_assistant_events:
         # remove
         if get_google_event_code(google_event) not in epitech_event_codes:
-            print(f'[-] {google_event["summary"]})')
+            print(f'[-] {google_event["summary"]}')
             delete_google_event(calendarID, google_event)
             removed_event_count += 1
 
