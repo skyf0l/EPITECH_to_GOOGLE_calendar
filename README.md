@@ -47,6 +47,30 @@ Create a `config.json` file with the following content at root of the repo:
 
 If you don't want to some events you can set the value of the calendarID to null, and if you want to put all events in only one calendarID you can
 
+### Multi account? So easy!
+
+```json
+[
+    {
+        "comment": "student / aer ...",
+        "epitech_autologin": "auth-...",
+        "calendarID_events": "...@group.calendar.google.com",
+        "calendarID_timeline": "...@group.calendar.google.com",
+        "calendarID_teaching_team": "...@group.calendar.google.com",
+        "calendarID_other_calendars": "...@group.calendar.google.com"
+    },
+    {
+        "comment": "student / aer ...",
+        "epitech_autologin": "auth-...",
+        "calendarID_events": "...@group.calendar.google.com",
+        "calendarID_timeline": "...@group.calendar.google.com",
+        "calendarID_teaching_team": "...@group.calendar.google.com",
+        "calendarID_other_calendars": "...@group.calendar.google.com"
+    },
+    ...
+]
+```
+
 ## How to get calendarID?
 
  - Create a calendar in google
