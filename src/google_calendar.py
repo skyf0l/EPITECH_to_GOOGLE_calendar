@@ -9,6 +9,8 @@ from src.epitech_calendar import get_epitech_event_date
 from datetime import datetime, timedelta
 import re
 
+from src.epitech_calendar import *
+
 # init google calendar access
 
 # https://medium.com/@butteredwaffles/working-with-google-calendar-api-8121d5048597
@@ -53,24 +55,24 @@ def get_event_location(event):
 def make_event_description(event):
     description = ''
 
-    if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and event.get('codeacti'):
-        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{event['codeacti']}/"
+    if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
+        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_code(event)}/"
         description += f"<a href=\"{event_url}\">Link {event['acti_title']}</a>"
         description += '<br>'
 
-    description += f"#event={event['codeacti']}!"
+    description += f"#event={get_event_code(event)}!"
     return description
 
 
 def make_project_description(project):
     description = ''
 
-    if project.get('scolaryear') and project.get('codemodule') and project.get('codeinstance') and project.get('codeacti'):
-        event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{project['codeacti']}/project/#!/group"
+    if project.get('scolaryear') and project.get('codemodule') and project.get('codeinstance') and get_event_code(project):
+        event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{get_event_code(project)}/project/#!/group"
         description += f"<a href=\"{event_url}\">Link {project['acti_title']}</a>"
         description += '<br>'
 
-    description += f"#project={project['codeacti']}!"
+    description += f"#project={get_event_code(project)}!"
     return description
 
 

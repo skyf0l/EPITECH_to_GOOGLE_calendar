@@ -5,14 +5,18 @@ from datetime import datetime, timedelta
 
 
 def get_event_code(event):
-    return event['codeacti']
+    if event.get('codeacti') is not None:
+        return event['codeacti']
+    if event.get('codeevent') is not None:
+        return event['codeevent']
+    return None
 
 
 def get_event_codes(events):
     event_codes = []
     for event in events:
         event_code = get_event_code(event)
-        if event_code not in event_codes:
+        if event_code is not None and event_code not in event_codes:
             event_codes.append(event_code)
     return event_codes
 
@@ -57,11 +61,11 @@ def get_my_epitech_events(epitechAutologin, start=None, end=None):
     return events_registered
 
 # format: start/end => datetime
-# get_my_epitech_activities() => current week
-# get_my_epitech_activities(start) => all after start included
-# get_my_epitech_activities(end) => all in one month before end and end
+# get_all_epitech_activities() => current week
+# get_all_epitech_activities(start) => all after start included
+# get_all_epitech_activities(end) => all in one month before end and end
 
-def get_my_epitech_activities(epitechAutologin, start=None, end=None):
+def get_all_epitech_activities(epitechAutologin, start=None, end=None):
     if start is None and end is None:
         current_date = datetime.today()
         start = current_date - timedelta(days=current_date.weekday())
@@ -75,10 +79,10 @@ def get_my_epitech_activities(epitechAutologin, start=None, end=None):
     return requests.get(url).json()
 
 
-# same as get_my_epitech_activities but keep only registered projects
+# same as get_all_epitech_activities but keep only registered projects
 
 def get_my_epitech_projects(epitechAutologin, start=None, end=None):
-    activities = get_my_epitech_activities(epitechAutologin, start, end)
+    activities = get_all_epitech_activities(epitechAutologin, start, end)
     projets = []
 
     for activity in activities:
@@ -89,12 +93,31 @@ def get_my_epitech_projects(epitechAutologin, start=None, end=None):
     return projets
 
 
-# same as get_my_epitech_activities but keep only assistant events
+# get all events un a module (module_name is scolaryear/codemodule/codeinstance)
+
+def get_module_activities(epitechAutologin, module_name):
+    url = f'https://intra.epitech.eu/{epitechAutologin}/module/{module_name}/?format=json'
+    return requests.get(url).json()['activites']
+
+
+# same as get_all_epitech_activities but keep only assistant events
 
 def get_my_assistant_events(epitechAutologin, start=None, end=None):
-    events = []
+    events = get_all_epitech_activities(epitechAutologin, start=start, end=end)
+    assistant_events = []
 
-    return events
+    modules_names = []
+    for event in events:
+        if 'scolaryear' in event and 'codemodule' in event and 'codeinstance' in event:
+            module_name = f'{event["scolaryear"]}/{event["codemodule"]}/{event["codeinstance"]}'
+            if module_name not in modules_names:
+                modules_names.append(module_name)
+    for module_name in modules_names:
+        module_activities = get_module_activities(epitechAutologin, module_name)
+        for module_activity in module_activities:
+            if len(module_activity['events']) > 1:
+                print(module_activity['title'], len(module_activity['events']))
+    return assistant_events
 
 
 # same as get_all_epitech_events but keep only other calendar events

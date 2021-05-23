@@ -27,7 +27,7 @@ def update_events(calendarID, google_events, my_events):
     removed_event_count = 0
 
     for event in my_events:
-        if event['codeacti'] not in google_event_codes:
+        if get_event_code(event) not in google_event_codes:
             # add
             print(f'[+] {event["acti_title"]}')
             add_google_calendar_event(calendarID, event)
@@ -35,7 +35,7 @@ def update_events(calendarID, google_events, my_events):
         else:
             # update
             for google_event in google_events:
-                if event['codeacti'] == get_google_event_code(google_event):
+                if get_event_code(event) == get_google_event_code(google_event):
                     event_start, event_end = get_epitech_event_date(event)
                     google_event_start, google_event_end = get_google_event_date(google_event)
                     if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
@@ -76,7 +76,7 @@ def update_projects(calendarID, google_projects, my_projects):
     removed_project_count = 0
 
     for project in my_projects:
-        if project['codeacti'] not in google_project_codes:
+        if get_event_code(project) not in google_project_codes:
             # add
             print(f'[+] {project["acti_title"]}')
             add_google_calendar_project(calendarID, project)
@@ -84,7 +84,7 @@ def update_projects(calendarID, google_projects, my_projects):
         else:
             # update
             for google_project in google_projects:
-                if project['codeacti'] == get_google_event_code(google_project):
+                if get_event_code(project) == get_google_event_code(google_project):
                     event_start, event_end = get_epitech_project_date(project)
                     google_event_start, google_event_end = get_google_event_date(google_project)
                     if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
