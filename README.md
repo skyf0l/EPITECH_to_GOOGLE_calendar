@@ -45,7 +45,7 @@ Create a `config.json` file with the following content at root of the repo:
  - `calendarID_teaching_team` is the calendar in which you want to put events which you supervise (acti HUB for example)
  - `calendarID_other_calendars` is the calendar in which you want to put events registered in your private epitech calendars
 
-If you don't want to some events you can set the value of the calendarID to null, and if you want to put all events in only one calendarID you can
+If you don't want some events you can delete line in `config.json`, and if you want to put all events in only one calendarID you can
 
 ### Multi account? So easy!
 
