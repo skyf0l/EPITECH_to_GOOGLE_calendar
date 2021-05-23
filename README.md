@@ -67,7 +67,7 @@ If you don't want to some events you can set the value of the calendarID to null
         "calendarID_teaching_team": "...@group.calendar.google.com",
         "calendarID_other_calendars": "...@group.calendar.google.com"
     },
-    ...
+    "..."
 ]
 ```
 
