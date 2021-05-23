@@ -1,12 +1,11 @@
 # EPITECH_to_GOOGLE_calendar
 
-Synchronize your Epitech calendar with Google.
+Synchronize your Epitech calendar with Google
 
 # Features
 
   - [x] Synchronization of epitech calendar on google calendar
   - [x] Update modified events / Remove canceled events
-  - [x] Update modified events
   - [x] Add location and event link of event
   - [x] Display only the selected slot for multi-slots events
   - [x] Project timeline
