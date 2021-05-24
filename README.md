@@ -9,9 +9,9 @@ Synchronize your Epitech calendar with Google
   - [x] Add location and event link of event
   - [x] Display only the selected slot for multi-slots events
   - [x] Project timeline
-  - [x] Fetch events the events which you supervise (acti HUB for example)
+  - [x] Fetch events the events which you supervise (HUB acti for example)
   - [x] Fetch registered events from private epitech calendars
-  - [x] Support multi epitech accounts (very great for AERs who have two epitech accounts and calendars)
+  - [x] Support multi epitech accounts (great for AERs who have two epitech accounts and calendars)
 
 # Config
 
