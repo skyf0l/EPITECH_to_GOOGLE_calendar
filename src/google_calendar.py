@@ -52,62 +52,75 @@ def get_event_location(event):
     return ''
 
 
-def make_event_description(event):
+def make_event_description(accountLogin, event):
     description = ''
 
     if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
         event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_code(event)}/"
-        description += f"<a href=\"{event_url}\">Link {event['acti_title']}</a>"
+        description += f"Link: <a href=\"{event_url}\">{event['acti_title']}</a>"
         description += '<br>'
 
-    description += f"#event={get_event_code(event)}!"
+    description += '<br>'
+    description += f'#accountLogin={accountLogin}!<br>'
+    description += f'#event={get_event_code(event)}!'
     return description
 
 
-def make_project_description(project):
+def make_project_description(accountLogin, project):
     description = ''
 
     if project.get('scolaryear') and project.get('codemodule') and project.get('codeinstance') and get_event_code(project):
         event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{get_event_code(project)}/project/#!/group"
-        description += f"<a href=\"{event_url}\">Link {project['acti_title']}</a>"
+        description += f"Link: <a href=\"{event_url}\">{project['acti_title']}</a>"
         description += '<br>'
 
-    description += f"#project={get_event_code(project)}!"
+    description += '<br>'
+    description += f'#accountLogin={accountLogin}!<br>'
+    description += f'#project={get_event_code(project)}!'
     return description
 
 
-def make_assistant_description(event):
+def make_assistant_description(accountLogin, event):
     description = ''
 
     if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
         event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_code(event)}/"
-        description += f"<a href=\"{event_url}\">Link {event['acti_title']}</a>"
+        description += f"Link: <a href=\"{event_url}\">{event['acti_title']}</a>"
         description += '<br>'
 
-    description += f"#assistant={get_event_code(event)}!"
+    description += '<br>'
+    description += f'#accountLogin={accountLogin}!<br>'
+    description += f'#assistant={get_event_code(event)}!'
     return description
 
 
-def make_other_calendar_event_description(event):
+def make_other_calendar_event_description(accountLogin, event):
     description = ''
+
+    if event.get('id') and event.get('id_calendar'):
+        event_url = f"https://intra.epitech.eu/planning/{event['id_calendar']}/{event['id']}/"
+        description += f"Link: <a href=\"{event_url}\">{event['title']}</a>"
+        description += '<br>'
 
     if event.get('description') and len(event['description']) != 0:
         description += event['description']
         description += '<br>'
 
+    description += '<br>'
+    description += f'#accountLogin={accountLogin}!<br>'
     description += f"#other_calendar_event={event['id_calendar']}-{event['id']}!"
     return description
 
 
 # add event to google calendar
 
-def add_google_calendar_event(calendarID, event):
+def add_google_calendar_event(calendarID, accountLogin, event):
     event_start, event_end = get_epitech_event_date(event)
 
     googleEvent = {
         'summary': event['codemodule'] + ' >> ' + event['acti_title'],
         'location': get_event_location(event),
-        'description': make_event_description(event),
+        'description': make_event_description(accountLogin, event),
         'start': {
             'dateTime': event_start.replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
@@ -122,10 +135,10 @@ def add_google_calendar_event(calendarID, event):
 
 # add project to google calendar
 
-def add_google_calendar_project(calendarID, project):
+def add_google_calendar_project(calendarID, accountLogin, project):
     googleEvent = {
         'summary': project['codemodule'] + ' >> ' + project['acti_title'],
-        'description': make_project_description(project),
+        'description': make_project_description(accountLogin, project),
         'start': {
             'dateTime': project['begin_acti'].replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
@@ -140,13 +153,13 @@ def add_google_calendar_project(calendarID, project):
 
 # add event to google calendar
 
-def add_google_calendar_assistant(calendarID, event):
+def add_google_calendar_assistant(calendarID, accountLogin, event):
     event_start, event_end = get_epitech_event_date(event)
 
     googleEvent = {
         'summary': event['codemodule'] + ' >> ' + event['acti_title'],
         'location': get_event_location(event),
-        'description': make_assistant_description(event),
+        'description': make_assistant_description(accountLogin, event),
         'start': {
             'dateTime': event_start.replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
@@ -161,11 +174,11 @@ def add_google_calendar_assistant(calendarID, event):
 
 # add other calendars event to google calendar
 
-def add_google_calendar_other_calendars_event(calendarID, event):
+def add_google_calendar_other_calendars_event(calendarID, accountLogin, event):
     googleEvent = {
         'summary': event['title'],
         'location': get_event_location(event),
-        'description': make_other_calendar_event_description(event),
+        'description': make_other_calendar_event_description(accountLogin, event),
         'start': {
             'dateTime': event['start'].replace(' ', 'T'),
             'timeZone': 'Europe/Paris'
@@ -178,7 +191,7 @@ def add_google_calendar_other_calendars_event(calendarID, event):
     service.events().insert(calendarId=calendarID, body=googleEvent).execute()
 
 
-def get_google_activities(calendarID, code, start=None, end=None):
+def get_google_activities(calendarID, accountLogin, code, start=None, end=None):
     if start is None and end is None:
         current_date = datetime.today()
         start = current_date - timedelta(days=current_date.weekday())
@@ -197,8 +210,9 @@ def get_google_activities(calendarID, code, start=None, end=None):
         google_events = service.events().list(calendarId=calendarID, pageToken=page_token,
                                               timeZone='Europe/Paris', timeMin=start, timeMax=end).execute()
         for event in google_events['items']:
-            if 'description' in event and re.search(f'#{code}=[\\w-]*!', event['description']) is not None:
-                events.append(event)
+            if 'description' in event:
+                if f'#accountLogin={accountLogin}!' in event['description'] and re.search(f'#{code}=[\\w-]*!', event['description']):
+                    events.append(event)
         page_token = google_events.get('nextPageToken')
         if not page_token:
             break
@@ -206,26 +220,26 @@ def get_google_activities(calendarID, code, start=None, end=None):
 
 # get events from google calendar
 
-def get_google_events(calendarID, start=None, end=None):
-    return get_google_activities(calendarID, 'event', start, end)
+def get_google_events(calendarID, accountLogin, start=None, end=None):
+    return get_google_activities(calendarID, accountLogin, 'event', start, end)
 
 
 # get projects from google calendar
 
-def get_google_projects(calendarID, start=None, end=None):
-    return get_google_activities(calendarID, 'project', start, end)
+def get_google_projects(calendarID, accountLogin, start=None, end=None):
+    return get_google_activities(calendarID, accountLogin, 'project', start, end)
 
 
 # get assistant events from google calendar
 
-def get_google_assistant_events(calendarID, start=None, end=None):
-    return get_google_activities(calendarID, 'assistant', start, end)
+def get_google_assistant_events(calendarID, accountLogin, start=None, end=None):
+    return get_google_activities(calendarID, accountLogin, 'assistant', start, end)
 
 
 # get other calendars events from google calendar
 
-def get_google_other_calendars_events(calendarID, start=None, end=None):
-    return get_google_activities(calendarID, 'other_calendar_event', start, end)
+def get_google_other_calendars_events(calendarID, accountLogin, start=None, end=None):
+    return get_google_activities(calendarID, accountLogin, 'other_calendar_event', start, end)
 
 
 # return right (start, end) of event

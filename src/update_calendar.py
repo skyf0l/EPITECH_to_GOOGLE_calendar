@@ -18,7 +18,7 @@ def remove_duplicate_google_events(calendarID, events):
     return single_events
 
 
-def update_events(calendarID, google_events, my_events):
+def update_events(calendarID, accountLogin, google_events, my_events):
     google_events = remove_duplicate_google_events(calendarID, google_events)
     google_event_codes = get_google_event_codes(google_events)
 
@@ -30,7 +30,7 @@ def update_events(calendarID, google_events, my_events):
         if get_event_code(event) not in google_event_codes:
             # add
             print(f'[+] {event["acti_title"]}')
-            add_google_calendar_event(calendarID, event)
+            add_google_calendar_event(calendarID, accountLogin, event)
             add_event_count += 1
         else:
             # update
@@ -67,7 +67,7 @@ def update_events(calendarID, google_events, my_events):
         print('\tUp to date')
 
 
-def update_projects(calendarID, google_projects, my_projects):
+def update_projects(calendarID, accountLogin, google_projects, my_projects):
     google_projects = remove_duplicate_google_events(calendarID, google_projects)
     google_project_codes = get_google_event_codes(google_projects)
 
@@ -79,7 +79,7 @@ def update_projects(calendarID, google_projects, my_projects):
         if get_event_code(project) not in google_project_codes:
             # add
             print(f'[+] {project["acti_title"]}')
-            add_google_calendar_project(calendarID, project)
+            add_google_calendar_project(calendarID, accountLogin, project)
             add_project_count += 1
         else:
             # update
@@ -116,7 +116,7 @@ def update_projects(calendarID, google_projects, my_projects):
         print('\tUp to date')
 
 
-def update_assistant_events(calendarID, google_assistant_events, my_assistant_events):
+def update_assistant_events(calendarID, accountLogin, google_assistant_events, my_assistant_events):
     google_assistant_events = remove_duplicate_google_events(calendarID, google_assistant_events)
     google_assistant_event_codes = get_google_event_codes(google_assistant_events)
 
@@ -128,7 +128,7 @@ def update_assistant_events(calendarID, google_assistant_events, my_assistant_ev
         if get_event_code(event) not in google_assistant_event_codes:
             # add
             print(f'[+] {event["acti_title"]}')
-            add_google_calendar_assistant(calendarID, event)
+            add_google_calendar_assistant(calendarID, accountLogin, event)
             add_event_count += 1
         else:
             # update
@@ -165,7 +165,7 @@ def update_assistant_events(calendarID, google_assistant_events, my_assistant_ev
         print('\tUp to date')
 
 
-def update_other_calendars_events(calendarID, google_events, my_events):
+def update_other_calendars_events(calendarID, accountLogin, google_events, my_events):
     google_events = remove_duplicate_google_events(calendarID, google_events)
     google_event_codes = get_google_event_codes(google_events)
 
@@ -177,7 +177,7 @@ def update_other_calendars_events(calendarID, google_events, my_events):
         if get_other_calendars_event_code(event) not in google_event_codes:
             # add
             print(f'[+] {event["title"]} (id: {event["id"]}, id_calendar: {event["id_calendar"]})')
-            add_google_calendar_other_calendars_event(calendarID, event)
+            add_google_calendar_other_calendars_event(calendarID, accountLogin, event)
             add_event_count += 1
         else:
             # update

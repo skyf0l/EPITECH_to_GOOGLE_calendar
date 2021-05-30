@@ -36,31 +36,31 @@ for epitech_account in epitech_accounts:
 
     # update calendars
     if CALENDAR_ID_EVENTS is not None:
-        google_events = get_google_events(CALENDAR_ID_EVENTS, start=monday_of_current_week)
+        google_events = get_google_events(CALENDAR_ID_EVENTS, EPITECH_LOGIN, start=monday_of_current_week)
         print(f'-> Already {len(google_events)} events in google calendar')
         my_events = get_my_epitech_events(EPITECH_AUTOLOGIN, start=monday_of_current_week)
         print(f'-> {len(my_events)} events registered in epitech calendar')
-        update_events(CALENDAR_ID_EVENTS, google_events, my_events)
+        update_events(CALENDAR_ID_EVENTS, EPITECH_LOGIN, google_events, my_events)
 
     if CALENDAR_ID_TIMELINE is not None:
-        google_projects = get_google_projects(CALENDAR_ID_TIMELINE, start=monday_of_current_week)
+        google_projects = get_google_projects(CALENDAR_ID_TIMELINE, EPITECH_LOGIN, start=monday_of_current_week)
         print(f'-> Already {len(google_projects)} projects in google calendar')
         my_projects = get_my_epitech_projects(EPITECH_AUTOLOGIN, start=monday_of_current_week)
         print(f'-> {len(my_projects)} projects registered in epitech calendar')
-        update_projects(CALENDAR_ID_TIMELINE, google_projects, my_projects)
+        update_projects(CALENDAR_ID_TIMELINE, EPITECH_LOGIN, google_projects, my_projects)
 
     if CALENDAR_ID_TEACHING_TEAM is not None:
-        google_assistant_events = get_google_assistant_events(CALENDAR_ID_TEACHING_TEAM, start=monday_of_current_week)
+        google_assistant_events = get_google_assistant_events(CALENDAR_ID_TEACHING_TEAM, EPITECH_LOGIN, start=monday_of_current_week)
         print(f'-> Already {len(google_assistant_events)} assistant events in google calendar')
         my_google_assistant_events = get_my_assistant_events(EPITECH_AUTOLOGIN, EPITECH_LOGIN, start=monday_of_current_week)
         print(f'-> {len(my_google_assistant_events)} assistant events registered in epitech calendar')
-        update_assistant_events(CALENDAR_ID_TEACHING_TEAM, google_assistant_events, my_google_assistant_events)
+        update_assistant_events(CALENDAR_ID_TEACHING_TEAM, EPITECH_LOGIN, google_assistant_events, my_google_assistant_events)
 
     if CALENDAR_ID_OTHER_CALENDARS is not None:
-        google_other_calendars_events = get_google_other_calendars_events(CALENDAR_ID_OTHER_CALENDARS, start=monday_of_current_week)
+        google_other_calendars_events = get_google_other_calendars_events(CALENDAR_ID_OTHER_CALENDARS, EPITECH_LOGIN, start=monday_of_current_week)
         print(f'-> Already {len(google_other_calendars_events)} events registered in other calendars in google calendar')
         my_other_calendars_events = get_my_epitech_other_calendars_events(EPITECH_AUTOLOGIN, start=monday_of_current_week)
         print(f'-> {len(my_other_calendars_events)} events registered in other epitech calendars')
-        update_other_calendars_events(CALENDAR_ID_OTHER_CALENDARS, google_other_calendars_events, my_other_calendars_events)
+        update_other_calendars_events(CALENDAR_ID_OTHER_CALENDARS, EPITECH_LOGIN, google_other_calendars_events, my_other_calendars_events)
 
     print()
