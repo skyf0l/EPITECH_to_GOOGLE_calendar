@@ -1,6 +1,6 @@
 # EPITECH_to_GOOGLE_calendar
 
-Synchronize your Epitech calendar with Google
+Synchronize your Epitech calendar with Google!
 
 # Features
 
@@ -88,6 +88,10 @@ If you don't want some events you can delete line in `config.json`, and if you w
  - Go in `Integrate Calendar` section
  - Copy `Calendar ID` (in general it looks like `...@group.calendar.google.com`)
 
+## Google `credentials.json`
+
+To connect your google account with this application, you also need to create an OAuth credentials file (at https://developers.google.com/workspace/guides/create-credentials) and copy the final `credentials.json` at the root of the repository
+
 # Usage
 
 ### Fetch all next events
@@ -100,4 +104,14 @@ $ python3 main.py
 
 ```
 $ python3 main.py YYYY-MM-DD
+```
+
+# Automatization
+
+To automatize the synchronization with yours epitech calendars, you can use a cron
+
+For example, to run the program every half hour, you can copy this in your crontab (`crontab -e`):
+
+```
+*/30 * * * * cd /full/path/EPITECH_to_GOOGLE_calendar/; python3 main.py &>> log
 ```
