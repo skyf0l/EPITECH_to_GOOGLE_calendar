@@ -15,7 +15,13 @@ Synchronize your Epitech calendar with Google
 
 # Example
 
-[google calendar](.github/assets/google_calendar.png)
+This is my google calendar:
+ - In green: registered events from my epitech calendar
+ - In light pink: registered project timeline
+ - In grey: events that I supervise (often HUB activities)
+ - In red: registered events from my AER epitech calendar
+
+![google calendar](.github/assets/google_calendar.png)
 
 # Config
 
