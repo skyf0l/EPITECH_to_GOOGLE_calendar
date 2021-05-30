@@ -13,6 +13,10 @@ Synchronize your Epitech calendar with Google
   - [x] Fetch registered events from private epitech calendars
   - [x] Support multi epitech accounts (great for AERs who have two epitech accounts and calendars)
 
+# Example
+
+[google calendar](.github/assets/google_calendar.png)
+
 # Config
 
 ## Python3 - Requirements
