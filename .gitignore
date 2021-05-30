@@ -2,6 +2,8 @@
 config.json
 credentials.json
 token.json
+log
+*.log
 
 # Other
 .vscode
