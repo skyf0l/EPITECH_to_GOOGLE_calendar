@@ -90,7 +90,7 @@ def make_assistant_description(accountLogin, event):
 
     description += '<br>'
     description += f'#accountLogin={accountLogin}!<br>'
-    description += f'#assistant={get_event_code(event)}-{event["codesession"]}!'
+    description += f'#assistant={get_event_code(event)}!'
     return description
 
 
