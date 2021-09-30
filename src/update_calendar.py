@@ -36,6 +36,9 @@ def update_events(calendarID, accountLogin, google_events, my_events):
             # update
             for google_event in google_events:
                 if get_event_code(event) == get_google_event_code(google_event):
+                    is_update = False
+
+                    # check date
                     event_start, event_end = get_epitech_event_date(event)
                     google_event_start, google_event_end = get_google_event_date(google_event)
                     if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
@@ -44,6 +47,23 @@ def update_events(calendarID, accountLogin, google_events, my_events):
                         google_event['start']['timeZone'] = 'Europe/Paris'
                         google_event['end']['dateTime'] =  str(event_end).replace(' ', 'T')
                         google_event['end']['timeZone'] = 'Europe/Paris'
+                        is_update = True
+                    
+                    # check location
+                    event_location = get_event_location(event)
+                    if google_event.get('location') is not None and event_location != google_event['location']:
+                        print(f'[&] location / {google_event["summary"]}')
+                        google_event['location'] = event_location
+                        is_update = True
+                    
+                    # check description
+                    event_description = make_event_description(accountLogin, event)
+                    if event_description != google_event.get('description'):
+                        print(f'[&] description / {google_event["summary"]}')
+                        google_event['description'] = event_description
+                        is_update = True
+                    
+                    if is_update:
                         service.events().update(calendarId=calendarID, eventId=google_event['id'], body=google_event).execute()
                         update_event_count += 1
 
@@ -85,6 +105,9 @@ def update_projects(calendarID, accountLogin, google_projects, my_projects):
             # update
             for google_project in google_projects:
                 if get_event_code(project) == get_google_event_code(google_project):
+                    is_update = False
+
+                    # check date
                     event_start, event_end = get_epitech_project_date(project)
                     google_event_start, google_event_end = get_google_event_date(google_project)
                     if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
@@ -93,6 +116,16 @@ def update_projects(calendarID, accountLogin, google_projects, my_projects):
                         google_project['start']['timeZone'] = 'Europe/Paris'
                         google_project['end']['dateTime'] =  str(event_end).replace(' ', 'T')
                         google_project['end']['timeZone'] = 'Europe/Paris'
+                        is_update = True
+                    
+                    # check description
+                    event_description = make_project_description(accountLogin, project)
+                    if event_description != google_project.get('description'):
+                        print(f'[&] description / {google_project["summary"]}')
+                        google_project['description'] = event_description
+                        is_update = True
+                    
+                    if is_update:
                         service.events().update(calendarId=calendarID, eventId=google_project['id'], body=google_project).execute()
                         update_project_count += 1
 
@@ -134,6 +167,9 @@ def update_assistant_events(calendarID, accountLogin, google_assistant_events, m
             # update
             for google_event in google_assistant_events:
                 if get_event_code(event) == get_google_event_code(google_event):
+                    is_update = False
+
+                    # check date
                     event_start, event_end = get_epitech_event_date(event)
                     google_event_start, google_event_end = get_google_event_date(google_event)
                     if str(event_start) != str(google_event_start) or str(event_end) != str(google_event_end):
@@ -142,6 +178,23 @@ def update_assistant_events(calendarID, accountLogin, google_assistant_events, m
                         google_event['start']['timeZone'] = 'Europe/Paris'
                         google_event['end']['dateTime'] =  str(event_end).replace(' ', 'T')
                         google_event['end']['timeZone'] = 'Europe/Paris'
+                        is_update = True
+                    
+                    # check location
+                    event_location = get_event_location(event)
+                    if google_event.get('location') is not None and event_location != google_event['location']:
+                        print(f'[&] location / {google_event["summary"]}')
+                        google_event['location'] = event_location
+                        is_update = True
+                    
+                    # check description
+                    event_description = make_assistant_description(accountLogin, event)
+                    if event_description != google_event.get('description'):
+                        print(f'[&] description / {google_event["summary"]}')
+                        google_event['description'] = event_description
+                        is_update = True
+                    
+                    if is_update:
                         service.events().update(calendarId=calendarID, eventId=google_event['id'], body=google_event).execute()
                         update_event_count += 1
 
