@@ -211,7 +211,7 @@ def get_google_activities(calendarID, accountLogin, code, start=None, end=None):
                                               timeZone='Europe/Paris', timeMin=start, timeMax=end).execute()
         for event in google_events['items']:
             if 'description' in event:
-                if f'#accountLogin={accountLogin}!' in event['description'] and re.search(f'#{code}=[\\w-]*!', event['description']):
+                if re.search(f'#accountLogin=(?:<a.*>)?{accountLogin}(?:<\/a>)?!', event['description']) and re.search(f'#{code}=[\\w-]*!', event['description']):
                     events.append(event)
         page_token = google_events.get('nextPageToken')
         if not page_token:
