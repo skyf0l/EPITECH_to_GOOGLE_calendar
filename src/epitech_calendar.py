@@ -25,11 +25,14 @@ def compute_start_end(start, end):
     return start, end
 
 def get_event_code(event):
+    code = ''
     if event.get('codeacti') is not None:
-        return event['codeacti']
-    if event.get('codeevent') is not None:
-        return event['codeevent']
-    return None
+        code += event['codeacti']
+    elif event.get('codeevent') is not None:
+        code += event['codeevent']
+    if event.get('codesession') is not None:
+        code += f"-{event['codesession']}"
+    return code
 
 
 def get_event_codes(events):
@@ -118,7 +121,7 @@ def is_assistant(epitechLogin, event):
     return False
 
 
-def format_assistant_event(activity, event, module_name):
+def format_assistant_event(activity, event, session_id, module_name):
     scolaryear, codemodule, codeinstance = module_name.split('/')
     return {
         'scolaryear': scolaryear,
@@ -126,6 +129,7 @@ def format_assistant_event(activity, event, module_name):
         'codeinstance': codeinstance,
         'codeacti': activity['codeacti'],
         'codeevent': event['code'],
+        'codesession': session_id,
         'acti_title': activity['title'],
         'start': event['begin'],
         'end': event['end'],
@@ -149,7 +153,8 @@ def get_my_assistant_events(epitechAutologin, epitechLogin, start=None, end=None
     for module_name in modules_names:
         module_activities = get_module_activities(epitechAutologin, module_name)
         for module_activity in module_activities:
-            for module_activity_event in module_activity['events']:
+            for session_id in range(len(module_activity['events'])):
+                module_activity_event = module_activity['events'][session_id]
                 # check if date is valid
                 if start > datetime.fromisoformat(module_activity_event['begin']):
                     continue
@@ -158,7 +163,7 @@ def get_my_assistant_events(epitechAutologin, epitechLogin, start=None, end=None
 
                 if not is_assistant(epitechLogin, module_activity_event):
                     continue
-                assistant_events.append(format_assistant_event(module_activity, module_activity_event, module_name))
+                assistant_events.append(format_assistant_event(module_activity, module_activity_event, session_id, module_name))
     return assistant_events
 
 

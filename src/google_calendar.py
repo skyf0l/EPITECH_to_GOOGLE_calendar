@@ -28,7 +28,7 @@ service = build('calendar', 'v3', http=creds.authorize(Http()))
 
 
 def get_google_event_code(googleEvent):
-    match = re.search('#(?:event|project|assistant|other_calendar_event)=([\w-]*)!', googleEvent['description'])
+    match = re.search('#(?:event|project|assistant|other_calendar_event)=([\w-]+)!', googleEvent['description'])
     if match is None or len(match.groups()) != 1:
         return None
     return match.groups()[0]
@@ -90,7 +90,7 @@ def make_assistant_description(accountLogin, event):
 
     description += '<br>'
     description += f'#accountLogin={accountLogin}!<br>'
-    description += f'#assistant={get_event_code(event)}!'
+    description += f'#assistant={get_event_code(event)}-{event["codesession"]}!'
     return description
 
 
