@@ -7,6 +7,7 @@ from src.update_calendar import *
 from sys import argv
 from datetime import datetime, timedelta
 import json
+import re
 
 
 # update callendar from monday of current week from 0 am
@@ -19,21 +20,37 @@ monday_of_current_week = datetime(year=monday_of_current_week.year, month=monday
 
 epitech_accounts = json.load(open('config.json'))
 
+def extractAutologin(s):
+    if s is None:
+        return None
+    m = re.search(r'(auth\-[\da-f]{40})', s)
+    if m:
+        return m.groups()[0]
+    return None
+
+def extractCalendarID(s):
+    if s is None:
+        return None
+    m = re.search(r'([\da-z]+@group.calendar.google.com)', s)
+    if m:
+        return m.groups()[0]
+    return None
+
 for epitech_account in epitech_accounts:
 
     if type(epitech_account) != dict:
         continue
 
     # config
-    EPITECH_AUTOLOGIN = epitech_account.get('epitech_autologin')
+    EPITECH_AUTOLOGIN = extractAutologin(epitech_account.get('epitech_autologin'))
     if EPITECH_AUTOLOGIN is None:
         print('invalid autologin')
         continue
     EPITECH_LOGIN = get_epitech_login(EPITECH_AUTOLOGIN)
-    CALENDAR_ID_EVENTS = epitech_account.get('calendarID_events')
-    CALENDAR_ID_TIMELINE = epitech_account.get('calendarID_timeline')
-    CALENDAR_ID_TEACHING_TEAM = epitech_account.get('calendarID_teaching_team')
-    CALENDAR_ID_OTHER_CALENDARS = epitech_account.get('calendarID_other_calendars')
+    CALENDAR_ID_EVENTS = extractCalendarID(epitech_account.get('calendarID_events'))
+    CALENDAR_ID_TIMELINE = extractCalendarID(epitech_account.get('calendarID_timeline'))
+    CALENDAR_ID_TEACHING_TEAM = extractCalendarID(epitech_account.get('calendarID_teaching_team'))
+    CALENDAR_ID_OTHER_CALENDARS = extractCalendarID(epitech_account.get('calendarID_other_calendars'))
 
     print(f'Epitech profile: {EPITECH_LOGIN}')
 
