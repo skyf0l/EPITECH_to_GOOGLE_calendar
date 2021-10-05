@@ -21,6 +21,9 @@ epitech_accounts = json.load(open('config.json'))
 
 for epitech_account in epitech_accounts:
 
+    if type(epitech_account) != dict:
+        continue
+
     # config
     EPITECH_AUTOLOGIN = epitech_account.get('epitech_autologin')
     if EPITECH_AUTOLOGIN is None:
