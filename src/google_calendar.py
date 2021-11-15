@@ -56,7 +56,7 @@ def make_event_description(accountLogin, event):
     description = ''
 
     if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
-        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_code(event)}/"
+        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_link_code(event)}/"
         description += f"Link: <a href=\"{event_url}\">{event['acti_title']}</a>"
         description += '<br>'
 
@@ -70,7 +70,7 @@ def make_project_description(accountLogin, project):
     description = ''
 
     if project.get('scolaryear') and project.get('codemodule') and project.get('codeinstance') and get_event_code(project):
-        event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{get_event_code(project)}/project/#!/group"
+        event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{get_event_link_code(project)}/project/#!/group"
         description += f"Link: <a href=\"{event_url}\">{project['acti_title']}</a>"
         description += '<br>'
 
@@ -84,7 +84,7 @@ def make_assistant_description(accountLogin, event):
     description = ''
 
     if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
-        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_code(event)}/"
+        event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_link_code(event)}/"
         description += f"Link: <a href=\"{event_url}\">{event['acti_title']}</a>"
         description += '<br>'
 
@@ -219,6 +219,7 @@ def get_google_activities(calendarID, accountLogin, code, start=None, end=None):
     return events
 
 # get events from google calendar
+
 
 def get_google_events(calendarID, accountLogin, start=None, end=None):
     return get_google_activities(calendarID, accountLogin, 'event', start, end)

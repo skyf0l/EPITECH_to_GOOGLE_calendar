@@ -24,6 +24,16 @@ def compute_start_end(start, end):
         end = start + timedelta(days=365)
     return start, end
 
+
+def get_event_link_code(event):
+    code = ''
+    if event.get('codeacti') is not None:
+        code += event['codeacti']
+    elif event.get('codeevent') is not None:
+        code += event['codeevent']
+    return code
+
+
 def get_event_code(event):
     code = ''
     if event.get('codeacti') is not None:
@@ -46,6 +56,7 @@ def get_event_codes(events):
 
 def get_other_calendars_event_code(event):
     return f'{event["id_calendar"]}-{event["id"]}'
+
 
 def get_other_calendars_event_codes(events):
     event_codes = []
@@ -85,6 +96,7 @@ def get_my_epitech_events(epitechAutologin, start=None, end=None):
 # get_all_epitech_activities() => current week
 # get_all_epitech_activities(start) => all after start included
 # get_all_epitech_activities(end) => all in one month before end and end
+
 
 def get_all_epitech_activities(epitechAutologin, start=None, end=None):
     start, end = compute_start_end(start, end)
