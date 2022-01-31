@@ -135,6 +135,17 @@ def is_assistant(epitechLogin, event):
 
 def format_assistant_event(activity, event, session_id, module_name):
     scolaryear, codemodule, codeinstance = module_name.split('/')
+    
+    prof_inst = []
+    for assistant in event['assistants']:
+        if assistant.get('login') is not None:
+            prof_inst.append(
+                {
+                    'type': 'user',
+                    'login': assistant['login']
+                }
+            )
+    
     return {
         'scolaryear': scolaryear,
         'codemodule': codemodule,
@@ -145,7 +156,8 @@ def format_assistant_event(activity, event, session_id, module_name):
         'acti_title': activity['title'],
         'start': event['begin'],
         'end': event['end'],
-        'location': event['location']
+        'location': event['location'],
+        'prof_inst': prof_inst
     }
 
 

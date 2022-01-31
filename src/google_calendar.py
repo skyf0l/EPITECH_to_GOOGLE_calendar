@@ -57,8 +57,20 @@ def make_event_description(accountLogin, event):
 
     if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
         event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_link_code(event)}/"
-        description += f"Link: <a href=\"{event_url}\">{event['acti_title']}</a>"
+        description += f"<b>Link</b>: <a href=\"{event_url}\">{event['acti_title']}</a>"
         description += '<br>'
+
+    if event.get('prof_inst') is not None:
+        teaching_teams = []
+        for teaching_team in event['prof_inst']:
+            if teaching_team.get('type') == 'user':
+                teaching_teams.append(teaching_team['login'])
+
+        if len(teaching_teams) != 0:
+            description += '<br>'
+            description += '<b>Teaching teams:</b><br>\t'
+            description += '<br>\t'.join(teaching_teams)
+            description += '<br>'
 
     description += '<br>'
     description += f'#accountLogin={accountLogin}!<br>'
@@ -71,7 +83,7 @@ def make_project_description(accountLogin, project):
 
     if project.get('scolaryear') and project.get('codemodule') and project.get('codeinstance') and get_event_code(project):
         event_url = f"https://intra.epitech.eu/module/{project['scolaryear']}/{project['codemodule']}/{project['codeinstance']}/{get_event_link_code(project)}/project/#!/group"
-        description += f"Link: <a href=\"{event_url}\">{project['acti_title']}</a>"
+        description += f"<b>Link</b>: <a href=\"{event_url}\">{project['acti_title']}</a>"
         description += '<br>'
 
     description += '<br>'
@@ -85,8 +97,20 @@ def make_assistant_description(accountLogin, event):
 
     if event.get('scolaryear') and event.get('codemodule') and event.get('codeinstance') and get_event_code(event):
         event_url = f"https://intra.epitech.eu/module/{event['scolaryear']}/{event['codemodule']}/{event['codeinstance']}/{get_event_link_code(event)}/"
-        description += f"Link: <a href=\"{event_url}\">{event['acti_title']}</a>"
+        description += f"<b>Link</b>: <a href=\"{event_url}\">{event['acti_title']}</a>"
         description += '<br>'
+
+    if event.get('prof_inst') is not None:
+        teaching_teams = []
+        for teaching_team in event['prof_inst']:
+            if teaching_team.get('type') == 'user':
+                teaching_teams.append(teaching_team['login'])
+
+        if len(teaching_teams) != 0:
+            description += '<br>'
+            description += '<b>Teaching teams:</b><br>\t'
+            description += '<br>\t'.join(teaching_teams)
+            description += '<br>'
 
     description += '<br>'
     description += f'#accountLogin={accountLogin}!<br>'
@@ -99,7 +123,7 @@ def make_other_calendar_event_description(accountLogin, event):
 
     if event.get('id') and event.get('id_calendar'):
         event_url = f"https://intra.epitech.eu/planning/{event['id_calendar']}/{event['id']}/"
-        description += f"Link: <a href=\"{event_url}\">{event['title']}</a>"
+        description += f"<b>Link</b>: <a href=\"{event_url}\">{event['title']}</a>"
         description += '<br>'
 
     if event.get('description') and len(event['description']) != 0:
