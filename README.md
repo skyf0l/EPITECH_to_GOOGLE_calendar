@@ -6,7 +6,7 @@ Synchronize your Epitech calendar with Google!
 
   - [x] Synchronization of epitech calendar on google calendar
   - [x] Update modified events / Remove canceled events
-  - [x] Display location and link of event and mails of teaching assistants in description
+  - [x] Display location and link of event and mails of teaching assistants in google event description
   - [x] Display only the selected slot for multi-slots events
   - [x] Project timeline
   - [x] Fetch events the events which you supervise (HUB acti for example)
