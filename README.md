@@ -23,6 +23,20 @@ This is my google calendar:
 
 ![google calendar](.github/assets/google_calendar.png)
 
+# Usage
+
+### Fetch all next events
+
+```
+$ python3 main.py
+```
+
+### Fetch all events since date
+
+```
+$ python3 main.py YYYY-MM-DD
+```
+
 # Config
 
 ## Python3 - Requirements
@@ -33,7 +47,7 @@ $ sudo python3 -m pip install -r requirements.txt
 
 ## Config file
 
-Create a `config.json` file with the following content at root of the repo:
+Create a `config.json` file (from `config-sample.json`) with the following content at root of the repo:
 
 ```json
 [
@@ -52,18 +66,18 @@ Create a `config.json` file with the following content at root of the repo:
  - `epitech_autologin` is your epitech autologin, you can find it on https://intra.epitech.eu/admin/autolog (copy only `auth-...` part)
  - `calendarID_events` is the calendar in which you want to put all registered events
  - `calendarID_timeline` is the calendar in which you want to put projects timeline
- - `calendarID_teaching_team` is the calendar in which you want to put events which you supervise (acti HUB for example)
+ - `calendarID_teaching_team` is the calendar in which you want to put events which you supervise (HUB activities for example)
  - `calendarID_other_calendars` is the calendar in which you want to put events registered in your private epitech calendars
 
 If you don't want some events you can delete line in `config.json` or set value to `null`.
 If you want to put all events in only one calendarID you can by using the same calendarID.
 
-### Multi account? So easy!
+### Multi epitech account or fiend account? So easy!
 
 ```json
 [
     {
-        "comment": "student / aer ...",
+        "comment": "student",
         "epitech_autologin": "auth-...",
         "calendarID_events": "...@group.calendar.google.com",
         "calendarID_timeline": "...@group.calendar.google.com",
@@ -71,7 +85,7 @@ If you want to put all events in only one calendarID you can by using the same c
         "calendarID_other_calendars": "...@group.calendar.google.com"
     },
     {
-        "comment": "student / aer ...",
+        "comment": "aer",
         "epitech_autologin": "auth-...",
         "calendarID_events": "...@group.calendar.google.com",
         "calendarID_timeline": "...@group.calendar.google.com",
@@ -92,20 +106,6 @@ If you want to put all events in only one calendarID you can by using the same c
 ## Google `credentials.json`
 
 To connect your google account with this application, you also need to create an OAuth credentials file (at https://developers.google.com/workspace/guides/create-credentials) and copy the final `credentials.json` at the root of the repository
-
-# Usage
-
-### Fetch all next events
-
-```
-$ python3 main.py
-```
-
-### Fetch all events since date
-
-```
-$ python3 main.py YYYY-MM-DD
-```
 
 # Automatization
 
