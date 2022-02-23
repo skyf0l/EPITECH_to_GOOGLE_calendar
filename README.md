@@ -91,8 +91,7 @@ If you want to put all events in only one calendarID you can by using the same c
         "calendarID_timeline": "...@group.calendar.google.com",
         "calendarID_teaching_team": "...@group.calendar.google.com",
         "calendarID_other_calendars": "...@group.calendar.google.com"
-    },
-    "..."
+    }
 ]
 ```
 
