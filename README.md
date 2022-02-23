@@ -104,7 +104,7 @@ If you want to put all events in only one calendarID you can by using the same c
 
 ## Google `credentials.json`
 
-To connect your google account with this application, you also need to create an OAuth credentials file (at https://developers.google.com/workspace/guides/create-credentials) and copy the final `credentials.json` at the root of the repository
+To connect your google account with this application, you also need to create an OAuth credentials file ([How generate credentials](Generate_credentials.md)) and copy the final `credentials.json` at the root of the repository
 
 # Automatization
 
