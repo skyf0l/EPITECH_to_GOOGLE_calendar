@@ -16,26 +16,30 @@ Fill out `Application name`, `User support email` and `Developer email address` 
 
 ![stage 4](.github/assets/generate_credentials/4.png)
 
+And click on `Publish app` button.
+
+![stage 4](.github/assets/generate_credentials/5.png)
+
 Then, we need to allow `Google Calendar API` to access your google account. Select `Library` tab.
 
-![stage 5](.github/assets/generate_credentials/5.png)
+![stage 5](.github/assets/generate_credentials/6.png)
 
 Search for `Google Calendar API` and select it.
 
-![stage 6](.github/assets/generate_credentials/6.png)
+![stage 6](.github/assets/generate_credentials/7.png)
 
 After that, click on `Enable` button.
 
-![stage 7](.github/assets/generate_credentials/7.png)
+![stage 7](.github/assets/generate_credentials/8.png)
 
 Now, you can generate your `credentials.json` file. Select `Credentials` tab and click on `Create credentials` button and choose `OAuth client ID`.
 
-![stage 8](.github/assets/generate_credentials/8.png)
+![stage 8](.github/assets/generate_credentials/9.png)
 
 Select `Desktop app` as `Application type`, fill out `Application name` and click on `Create` button.
 
-![stage 9](.github/assets/generate_credentials/9.png)
+![stage 9](.github/assets/generate_credentials/10.png)
 
 Then, download your generated credentials file.
 
-![stage 10](.github/assets/generate_credentials/10.png)
+![stage 10](.github/assets/generate_credentials/11.png)
