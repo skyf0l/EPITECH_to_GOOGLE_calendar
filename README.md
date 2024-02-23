@@ -53,7 +53,7 @@ Create a `config.json` file (from `config-sample.json`) with the following conte
 [
     {
         "comment": "student / aer ...",
-        "epitech_autologin": "auth-...",
+        "epitech_cookie": "...",
         "calendarID_events": "...@group.calendar.google.com",
         "calendarID_timeline": "...@group.calendar.google.com",
         "calendarID_teaching_team": "...@group.calendar.google.com",
@@ -63,7 +63,7 @@ Create a `config.json` file (from `config-sample.json`) with the following conte
 ```
 
  - `comment` is what you want, it doesn't matter, it's just useful not to get mixed up if you have multiple accounts
- - `epitech_autologin` is your epitech autologin, you can find it on https://intra.epitech.eu/admin/autolog (copy only `auth-...` part)
+ - `epitech_cookie` is your user cookie, find it by going on the intra and going into dev console -> application -> cookies -> user
  - `calendarID_events` is the calendar in which you want to put all registered events
  - `calendarID_timeline` is the calendar in which you want to put projects timeline
  - `calendarID_teaching_team` is the calendar in which you want to put events which you supervise (HUB activities for example)
@@ -78,7 +78,7 @@ If you want to put all events in only one calendarID you can by using the same c
 [
     {
         "comment": "student",
-        "epitech_autologin": "auth-...",
+        "epitech_cookie": "...",
         "calendarID_events": "...@group.calendar.google.com",
         "calendarID_timeline": "...@group.calendar.google.com",
         "calendarID_teaching_team": "...@group.calendar.google.com",
@@ -86,7 +86,7 @@ If you want to put all events in only one calendarID you can by using the same c
     },
     {
         "comment": "aer",
-        "epitech_autologin": "auth-...",
+        "epitech_cookie": "...",
         "calendarID_events": "...@group.calendar.google.com",
         "calendarID_timeline": "...@group.calendar.google.com",
         "calendarID_teaching_team": "...@group.calendar.google.com",

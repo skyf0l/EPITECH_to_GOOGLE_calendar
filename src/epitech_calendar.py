@@ -4,9 +4,9 @@ import requests
 from datetime import datetime, timedelta
 
 
-def get_epitech_login(epitechAutologin):
-    url = f'https://intra.epitech.eu/{epitechAutologin}/user/?format=json'
-    user_data = requests.get(url).json()
+def get_epitech_login(epitechCookie):
+    url = 'https://intra.epitech.eu/user/?format=json'
+    user_data = requests.get(url, cookies={'user': epitechCookie}).json()
     return user_data['login']
 
 
@@ -71,13 +71,13 @@ def get_other_calendars_event_codes(events):
 # start null => all after start
 # end null => all in one month before end and end
 
-def get_all_epitech_events(epitechAutologin, start: datetime = None, end: datetime = None):
-    url = f'https://intra.epitech.eu/{epitechAutologin}/planning/load?format=json'
+def get_all_epitech_events(epitechCookie, start: datetime = None, end: datetime = None):
+    url = 'https://intra.epitech.eu/planning/load?format=json'
     if start is not None:
         url += '&start=' + start.strftime('%Y-%m-%d')
     if end is not None:
         url += '&end=' + end.strftime('%Y-%m-%d')
-    return requests.get(url).json()
+    return requests.get(url, cookies={'user': epitechCookie}).json()
 
 
 # same as get_all_epitech_events but keep only registered epitech events
@@ -98,11 +98,11 @@ def get_my_epitech_events(epitechAutologin, start=None, end=None):
 # get_all_epitech_activities(end) => all in one month before end and end
 
 
-def get_all_epitech_activities(epitechAutologin, start=None, end=None):
+def get_all_epitech_activities(epitechCookie, start=None, end=None):
     start, end = compute_start_end(start, end)
 
-    url = f'https://intra.epitech.eu/{epitechAutologin}/module/board/?format=json&start={start.strftime("%Y-%m-%d")}&end={end.strftime("%Y-%m-%d")}'
-    return requests.get(url).json()
+    url = f'https://intra.epitech.eu/module/board/?format=json&start={start.strftime("%Y-%m-%d")}&end={end.strftime("%Y-%m-%d")}'
+    return requests.get(url, cookies={'user': epitechCookie}).json()
 
 
 # same as get_all_epitech_activities but keep only registered projects
@@ -121,9 +121,9 @@ def get_my_epitech_projects(epitechAutologin, start=None, end=None):
 
 # get all events un a module (module_name is scolaryear/codemodule/codeinstance)
 
-def get_module_activities(epitechAutologin, module_name):
-    url = f'https://intra.epitech.eu/{epitechAutologin}/module/{module_name}/?format=json'
-    return requests.get(url).json()['activites']
+def get_module_activities(epitechCookie, module_name):
+    url = f'https://intra.epitech.eu/module/{module_name}/?format=json'
+    return requests.get(url, cookies={'user': epitechCookie}).json()['activites']
 
 
 def is_assistant(epitechLogin, event):
