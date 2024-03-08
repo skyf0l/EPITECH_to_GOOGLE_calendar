@@ -23,7 +23,7 @@ epitech_accounts = json.load(open('config.json'))
 def extractCalendarID(s):
     if s is None:
         return None
-    m = re.search(r'([\w\.]+@gmail.com)', s)
+    m = re.search(r'([\da-z]+@group.calendar.google.com)', s)
     if m:
         return m.groups()[0]
     return None
