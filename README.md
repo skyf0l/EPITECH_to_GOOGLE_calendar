@@ -54,10 +54,10 @@ Create a `config.json` file (from `config-sample.json`) with the following conte
     {
         "comment": "student / aer ...",
         "epitech_cookie": "...",
-        "calendarID_events": "...@group.calendar.google.com",
-        "calendarID_timeline": "...@group.calendar.google.com",
-        "calendarID_teaching_team": "...@group.calendar.google.com",
-        "calendarID_other_calendars": "...@group.calendar.google.com"
+        "calendarID_events": "...@gmail.com",
+        "calendarID_timeline": "...@gmail.com",
+        "calendarID_teaching_team": "...@gmail.com",
+        "calendarID_other_calendars": "...@gmail.com"
     }
 ]
 ```
@@ -79,18 +79,18 @@ If you want to put all events in only one calendarID you can by using the same c
     {
         "comment": "student",
         "epitech_cookie": "...",
-        "calendarID_events": "...@group.calendar.google.com",
-        "calendarID_timeline": "...@group.calendar.google.com",
-        "calendarID_teaching_team": "...@group.calendar.google.com",
-        "calendarID_other_calendars": "...@group.calendar.google.com"
+        "calendarID_events": "...@gmail.com",
+        "calendarID_timeline": "...@gmail.com",
+        "calendarID_teaching_team": "...@gmail.com",
+        "calendarID_other_calendars": "...@gmail.com"
     },
     {
         "comment": "aer",
         "epitech_cookie": "...",
-        "calendarID_events": "...@group.calendar.google.com",
-        "calendarID_timeline": "...@group.calendar.google.com",
-        "calendarID_teaching_team": "...@group.calendar.google.com",
-        "calendarID_other_calendars": "...@group.calendar.google.com"
+        "calendarID_events": "...@gmail.com",
+        "calendarID_timeline": "...@gmail.com",
+        "calendarID_teaching_team": "...@gmail.com",
+        "calendarID_other_calendars": "...@gmail.com"
     }
 ]
 ```
@@ -100,7 +100,7 @@ If you want to put all events in only one calendarID you can by using the same c
  - Create a calendar in google
  - Go in your new calendar's settings
  - Go in `Integrate Calendar` section
- - Copy `Calendar ID` (in general it looks like `...@group.calendar.google.com`)
+ - Copy `Calendar ID` (in general it looks like `...@gmail.com`)
 
 ## Google `credentials.json`
 

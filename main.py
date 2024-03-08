@@ -20,18 +20,10 @@ monday_of_current_week = datetime(year=monday_of_current_week.year, month=monday
 
 epitech_accounts = json.load(open('config.json'))
 
-def extractAutologin(s):
-    if s is None:
-        return None
-    m = re.search(r'(auth\-[\da-f]{40})', s)
-    if m:
-        return m.groups()[0]
-    return None
-
 def extractCalendarID(s):
     if s is None:
         return None
-    m = re.search(r'([\da-z]+@group.calendar.google.com)', s)
+    m = re.search(r'([\w\.]+@gmail.com)', s)
     if m:
         return m.groups()[0]
     return None
