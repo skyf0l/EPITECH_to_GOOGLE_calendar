@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
 
 import json
-import requests
 
 from src.google_calendar import *
-
-def get_epitech_login(epitechAutologin):
-    url = f'https://intra.epitech.eu/{epitechAutologin}/user/?format=json'
-    user_data = requests.get(url).json()
-    return user_data['login']
 
 
 def main():

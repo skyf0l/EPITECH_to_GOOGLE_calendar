@@ -100,7 +100,7 @@ If you want to put all events in only one calendarID you can by using the same c
  - Create a calendar in google
  - Go in your new calendar's settings
  - Go in `Integrate Calendar` section
- - Copy `Calendar ID` (in general it looks like `...@group.calendar.google.com`)
+ - Copy `Calendar ID` (in general it looks like `...@group.calendar.google.com` or `...@gmail.com`)
 
 ## Google `credentials.json`
 

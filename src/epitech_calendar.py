@@ -4,9 +4,14 @@ import requests
 from datetime import datetime, timedelta
 
 
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+}
+
+
 def get_epitech_login(epitechCookie):
     url = 'https://intra.epitech.eu/user/?format=json'
-    user_data = requests.get(url, cookies={'user': epitechCookie}).json()
+    user_data = requests.get(url, cookies={'user': epitechCookie}, headers=headers).json()
     return user_data['login']
 
 
@@ -77,7 +82,7 @@ def get_all_epitech_events(epitechCookie, start: datetime = None, end: datetime 
         url += '&start=' + start.strftime('%Y-%m-%d')
     if end is not None:
         url += '&end=' + end.strftime('%Y-%m-%d')
-    return requests.get(url, cookies={'user': epitechCookie}).json()
+    return requests.get(url, cookies={'user': epitechCookie}, headers=headers).json()
 
 
 # same as get_all_epitech_events but keep only registered epitech events
@@ -102,7 +107,7 @@ def get_all_epitech_activities(epitechCookie, start=None, end=None):
     start, end = compute_start_end(start, end)
 
     url = f'https://intra.epitech.eu/module/board/?format=json&start={start.strftime("%Y-%m-%d")}&end={end.strftime("%Y-%m-%d")}'
-    return requests.get(url, cookies={'user': epitechCookie}).json()
+    return requests.get(url, cookies={'user': epitechCookie}, headers=headers).json()
 
 
 # same as get_all_epitech_activities but keep only registered projects
@@ -123,7 +128,7 @@ def get_my_epitech_projects(epitechAutologin, start=None, end=None):
 
 def get_module_activities(epitechCookie, module_name):
     url = f'https://intra.epitech.eu/module/{module_name}/?format=json'
-    return requests.get(url, cookies={'user': epitechCookie}).json()['activites']
+    return requests.get(url, cookies={'user': epitechCookie}, headers=headers).json()['activites']
 
 
 def is_assistant(epitechLogin, event):
@@ -135,7 +140,7 @@ def is_assistant(epitechLogin, event):
 
 def format_assistant_event(activity, event, session_id, module_name):
     scolaryear, codemodule, codeinstance = module_name.split('/')
-    
+
     prof_inst = []
     for assistant in event['assistants']:
         if assistant.get('login') is not None:
@@ -145,7 +150,7 @@ def format_assistant_event(activity, event, session_id, module_name):
                     'login': assistant['login']
                 }
             )
-    
+
     return {
         'scolaryear': scolaryear,
         'codemodule': codemodule,
